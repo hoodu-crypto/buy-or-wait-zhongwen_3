@@ -1855,7 +1855,8 @@ const WAIT_MODAL_I18N = {
     voiceEmpty: "1초 이상 녹음해 주세요.",
     voiceSendError: "음성 메시지를 보내지 못했어요.",
     voiceSaved: "음성 메시지를 저장했어요.",
-    voicePlaybackError: "음성을 불러오지 못했어요. 페이지를 다시 열어 주세요."
+    voicePlaybackError: "음성을 불러오지 못했어요. 페이지를 다시 열어 주세요.",
+    voiceLoading: "음성을 불러오는 중..."
   },
 
   zh: {
@@ -1898,7 +1899,8 @@ const WAIT_MODAL_I18N = {
     voiceEmpty: "请至少录音 1 秒。",
     voiceSendError: "语音留言发送失败。",
     voiceSaved: "语音已保存并发送。",
-    voicePlaybackError: "语音加载失败，请重新打开页面。"
+    voicePlaybackError: "语音加载失败，请重新打开页面。",
+    voiceLoading: "正在准备语音…"
   },
 
   en: {
@@ -1941,7 +1943,8 @@ const WAIT_MODAL_I18N = {
     voiceEmpty: "Record for at least one second.",
     voiceSendError: "Voice message could not be sent.",
     voiceSaved: "Voice message saved and sent.",
-    voicePlaybackError: "Could not load audio. Reopen this page."
+    voicePlaybackError: "Could not load audio. Reopen this page.",
+    voiceLoading: "Preparing audio…"
   }
 };
 
@@ -2001,23 +2004,36 @@ function renderDiscussionMessages() {
     const audio = message.voice_path
       ? (message.voice_url
         ? `<div class="bow-disc-voice-player"><button class="bow-disc-voice-note" type="button" data-discussion-play="${escapeHTML(message.id)}" style="--voice-note-width:${voiceWidth}px" aria-label="${escapeHTML(waitText("voicePlay"))}"><svg class="bow-disc-play-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.8c0-.8.9-1.3 1.6-.8l9.2 6.1a1.1 1.1 0 0 1 0 1.8l-9.2 6.1c-.7.5-1.6 0-1.6-.8z"/></svg><svg class="bow-disc-pause-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 4h3.5v12H5zM11.5 4H15v12h-3.5z"/></svg><span class="bow-disc-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="bow-disc-voice-duration">${voiceDuration}</span></button><audio class="bow-disc-audio" data-discussion-audio="${escapeHTML(message.id)}" preload="none" src="${escapeHTML(message.voice_url)}"></audio></div>`
-        : `<small class="bow-disc-audio-pending">${escapeHTML(waitText("voicePlaybackError"))}</small>`)
+        : `<small class="bow-disc-audio-pending">${escapeHTML(waitText(message.voice_url_error ? "voicePlaybackError" : "voiceLoading"))}</small>`)
       : "";
-    return `<article class="bow-disc-message ${isMine ? "is-mine" : "is-friend"}"><div class="bow-disc-message-meta"><strong>${escapeHTML(sender)}</strong><time datetime="${escapeHTML(message.created_at || "")}">${escapeHTML(time)}</time></div>${body}${audio}${duration}</article>`;
+    return `<article class="bow-disc-message ${isMine ? "is-mine" : "is-friend"}${message.voice_path ? " has-voice" : ""}"><div class="bow-disc-message-meta"><strong>${escapeHTML(sender)}</strong><time datetime="${escapeHTML(message.created_at || "")}">${escapeHTML(time)}</time></div>${body}${audio}</article>`;
   }).join("");
 }
 
-async function prepareDiscussionMessage(message) {
-  if (!message?.voice_path || !supabaseClient) return message;
+async function resolveDiscussionVoiceURL(message) {
+  if (!message?.voice_path || !supabaseClient) return;
+  const itemKey = String(message.item_id);
+  const messageKey = String(message.id);
   try {
     const { data, error } = await supabaseClient.storage
       .from(BOW_VOICE_BUCKET)
       .createSignedUrl(message.voice_path, 60 * 60);
     if (error) throw error;
-    return { ...message, voice_url: data?.signedUrl || "" };
+    if (bowDiscussionMessageItemId !== itemKey) return;
+    const storedMessage = bowDiscussionMessages.find((entry) => String(entry.id) === messageKey);
+    if (!storedMessage) return;
+    storedMessage.voice_url = data?.signedUrl || "";
+    storedMessage.voice_url_error = !storedMessage.voice_url;
+    storedMessage.voice_url_loading = false;
+    renderDiscussionThread();
   } catch (error) {
     console.error("Could not create voice playback URL:", error);
-    return { ...message, voice_url: "" };
+    if (bowDiscussionMessageItemId !== itemKey) return;
+    const storedMessage = bowDiscussionMessages.find((entry) => String(entry.id) === messageKey);
+    if (!storedMessage) return;
+    storedMessage.voice_url_error = true;
+    storedMessage.voice_url_loading = false;
+    renderDiscussionThread();
   }
 }
 
@@ -2080,7 +2096,9 @@ async function loadDiscussionMessages(itemId) {
       table: "bow_item_messages",
       filter: `item_id=eq.${itemKey}`
     }, (payload) => {
-      void prepareDiscussionMessage(payload.new).then(addDiscussionMessage);
+      const incoming = { ...payload.new, voice_url_loading: Boolean(payload.new?.voice_path) };
+      addDiscussionMessage(incoming);
+      if (incoming.voice_path) void resolveDiscussionVoiceURL(incoming);
     })
     .subscribe((status) => {
       if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
@@ -2098,14 +2116,18 @@ async function loadDiscussionMessages(itemId) {
     if (error) throw error;
     if (bowDiscussionMessageItemId !== itemKey) return;
 
-    const preparedMessages = await Promise.all((data || []).map(prepareDiscussionMessage));
     const merged = new Map();
-    for (const message of preparedMessages) merged.set(String(message.id), message);
+    for (const message of data || []) {
+      merged.set(String(message.id), { ...message, voice_url_loading: Boolean(message.voice_path) });
+    }
     for (const message of bowDiscussionMessages) merged.set(String(message.id), message);
     bowDiscussionMessages = [...merged.values()].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
     bowDiscussionMessagesStatus = "ready";
     bowDiscussionMessagesErrorDetail = "";
     renderWaitModal();
+    for (const message of bowDiscussionMessages) {
+      if (message.voice_path && !message.voice_url) void resolveDiscussionVoiceURL(message);
+    }
   } catch (error) {
     console.error("Could not load discussion messages:", error);
     if (bowDiscussionMessageItemId === itemKey) {
@@ -2291,7 +2313,12 @@ async function uploadDiscussionVoice(blob, durationMs, itemId) {
       .select("id,item_id,sender_id,body,voice_path,voice_duration_ms,created_at")
       .single();
     if (error) throw error;
-    addDiscussionMessage(await prepareDiscussionMessage(data));
+    // The object is now referenced by a saved database row; never delete it if
+    // later UI rendering or playback-link creation fails.
+    uploadedPath = "";
+    const savedMessage = { ...data, voice_url_loading: true };
+    addDiscussionMessage(savedMessage);
+    void resolveDiscussionVoiceURL(savedMessage);
     notify(waitText("voiceSaved"));
   } catch (error) {
     console.error("Could not send discussion voice message:", error);

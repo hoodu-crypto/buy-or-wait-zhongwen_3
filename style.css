@@ -2457,3 +2457,24 @@ html body #waitModal.wait-modal .bow-disc-voice-duration {
     padding: 6px 10px;
   }
 }
+
+/* Voice messages keep only the compact player bubble, without the large chat card. */
+html body #waitModal.wait-modal .bow-disc-message.has-voice {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+html body #waitModal.wait-modal .bow-disc-message.has-voice .bow-disc-message-meta {
+  margin: 0 4px 5px;
+}
+html body #waitModal.wait-modal .bow-disc-message.has-voice .bow-disc-voice-player {
+  width: fit-content;
+}
+html body #waitModal.wait-modal .bow-disc-message.is-friend.has-voice .bow-disc-message-meta {
+  justify-content: flex-start;
+}
+html body #waitModal.wait-modal .bow-disc-message.is-mine.has-voice .bow-disc-message-meta {
+  justify-content: flex-end;
+}
