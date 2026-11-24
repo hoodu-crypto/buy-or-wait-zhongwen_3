@@ -1835,7 +1835,15 @@ const WAIT_MODAL_I18N = {
     satisfactionRegret: "괜히 샀어",
     empty: "아직 물건이 없어요.",
     close: "닫기",
-    updating: "변경 중..."
+    updating: "변경 중...",
+    messagesLoading: "친구와 나눈 이야기를 불러오는 중...",
+    messagesError: "메시지를 불러오지 못했어요. 잠시 후 다시 열어 주세요.",
+    noMessages: "아직 메시지가 없어요. 먼저 이야기를 시작해 보세요.",
+    messagePlaceholder: "친구에게 메시지 남기기...",
+    messageSend: "보내기",
+    messageMe: "나",
+    messageFriend: "친구",
+    messageSendError: "메시지를 보내지 못했어요. 다시 시도해 주세요."
   },
 
   zh: {
@@ -1858,7 +1866,15 @@ const WAIT_MODAL_I18N = {
     satisfactionRegret: "有点后悔",
     empty: "这里暂时没有物品。",
     close: "关闭",
-    updating: "正在修改..."
+    updating: "正在修改...",
+    messagesLoading: "正在加载你和朋友的留言…",
+    messagesError: "留言加载失败，请稍后重新打开。",
+    noMessages: "还没有留言，先说点什么吧。",
+    messagePlaceholder: "给朋友留一条消息…",
+    messageSend: "发送",
+    messageMe: "我",
+    messageFriend: "朋友",
+    messageSendError: "留言发送失败，请重试。"
   },
 
   en: {
@@ -1881,7 +1897,15 @@ const WAIT_MODAL_I18N = {
     satisfactionRegret: "Wish I hadn’t bought it.",
     empty: "Nothing here yet.",
     close: "Close",
-    updating: "Updating..."
+    updating: "Updating...",
+    messagesLoading: "Loading your conversation...",
+    messagesError: "Could not load messages. Reopen this item in a moment.",
+    noMessages: "No messages yet. Start the conversation.",
+    messagePlaceholder: "Leave a message for your friend...",
+    messageSend: "Send",
+    messageMe: "Me",
+    messageFriend: "Friend",
+    messageSendError: "Message could not be sent. Please try again."
   }
 };
 
@@ -1890,6 +1914,12 @@ let discussionId = null;
 let bowSharedItems = [];
 let waitModalBusy = false;
 let satisfactionOpenItemId = null;
+let bowDiscussionMessages = [];
+let bowDiscussionMessageItemId = "";
+let bowDiscussionMessagesStatus = "idle";
+let bowDiscussionMessageChannel = null;
+let bowDiscussionDraft = "";
+let bowDiscussionSendBusy = false;
 
 function waitText(key) {
   return (
@@ -1897,6 +1927,166 @@ function waitText(key) {
     WAIT_MODAL_I18N.ko[key] ||
     key
   );
+}
+
+function renderDiscussionMessages() {
+  if (bowDiscussionMessagesStatus === "loading") {
+    return `<p class="bow-disc-message-state">${escapeHTML(waitText("messagesLoading"))}</p>`;
+  }
+  if (bowDiscussionMessagesStatus === "error") {
+    return `<p class="bow-disc-message-state is-error">${escapeHTML(waitText("messagesError"))}</p>`;
+  }
+  if (!bowDiscussionMessages.length) {
+    return `<p class="bow-disc-message-state">${escapeHTML(waitText("noMessages"))}</p>`;
+  }
+
+  const locale = currentLang === "zh" ? "zh-CN" : currentLang === "en" ? "en-US" : "ko-KR";
+  return bowDiscussionMessages.map((message) => {
+    const isMine = message.sender_id === currentUser?.id;
+    const sender = isMine ? waitText("messageMe") : waitText("messageFriend");
+    const time = message.created_at
+      ? new Intl.DateTimeFormat(locale, { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(message.created_at))
+      : "";
+    const body = escapeHTML(message.body || "").replace(/\r?\n/g, "<br>");
+    return `<article class="bow-disc-message ${isMine ? "is-mine" : "is-friend"}"><div class="bow-disc-message-meta"><strong>${escapeHTML(sender)}</strong><time datetime="${escapeHTML(message.created_at || "")}">${escapeHTML(time)}</time></div><p>${body}</p></article>`;
+  }).join("");
+}
+
+function renderDiscussionThread() {
+  const thread = $("bowDiscussionMessages");
+  if (!thread) return;
+  thread.innerHTML = renderDiscussionMessages();
+  requestAnimationFrame(() => {
+    if (thread.isConnected) thread.scrollTop = thread.scrollHeight;
+  });
+}
+
+function addDiscussionMessage(message) {
+  if (!message?.id || String(message.item_id) !== String(bowDiscussionMessageItemId)) return;
+  if (bowDiscussionMessages.some((entry) => String(entry.id) === String(message.id))) return;
+  bowDiscussionMessages.push(message);
+  bowDiscussionMessages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+  bowDiscussionMessagesStatus = "ready";
+  renderDiscussionThread();
+}
+
+function clearDiscussionMessageChannel() {
+  if (supabaseClient && bowDiscussionMessageChannel) {
+    void supabaseClient.removeChannel(bowDiscussionMessageChannel);
+  }
+  bowDiscussionMessageChannel = null;
+}
+
+function clearDiscussionMessageContext() {
+  clearDiscussionMessageChannel();
+  bowDiscussionMessages = [];
+  bowDiscussionMessageItemId = "";
+  bowDiscussionMessagesStatus = "idle";
+  bowDiscussionDraft = "";
+  bowDiscussionSendBusy = false;
+}
+
+async function loadDiscussionMessages(itemId) {
+  const itemKey = String(itemId);
+  if (!await ensureCloudConnection()) {
+    if (bowDiscussionMessageItemId === itemKey) {
+      bowDiscussionMessagesStatus = "error";
+      renderDiscussionThread();
+    }
+    return;
+  }
+
+  if (bowDiscussionMessageItemId !== itemKey) return;
+
+  clearDiscussionMessageChannel();
+  bowDiscussionMessageChannel = supabaseClient
+    .channel(`bow-item-messages:${itemKey}`)
+    .on("postgres_changes", {
+      event: "INSERT",
+      schema: "public",
+      table: "bow_item_messages",
+      filter: `item_id=eq.${itemKey}`
+    }, (payload) => addDiscussionMessage(payload.new))
+    .subscribe((status) => {
+      if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+        console.warn("Discussion realtime subscription status:", status);
+      }
+    });
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("bow_item_messages")
+      .select("id,item_id,sender_id,body,created_at")
+      .eq("item_id", itemKey)
+      .order("created_at", { ascending: true });
+
+    if (error) throw error;
+    if (bowDiscussionMessageItemId !== itemKey) return;
+
+    const merged = new Map();
+    for (const message of data || []) merged.set(String(message.id), message);
+    for (const message of bowDiscussionMessages) merged.set(String(message.id), message);
+    bowDiscussionMessages = [...merged.values()].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    bowDiscussionMessagesStatus = "ready";
+    renderWaitModal();
+  } catch (error) {
+    console.error("Could not load discussion messages:", error);
+    if (bowDiscussionMessageItemId === itemKey) {
+      bowDiscussionMessagesStatus = "error";
+      renderWaitModal();
+    }
+  }
+}
+
+function activateDiscussionMessages(itemId) {
+  const itemKey = String(itemId);
+  if (bowDiscussionMessageItemId === itemKey) return;
+  clearDiscussionMessageContext();
+  bowDiscussionMessageItemId = itemKey;
+  bowDiscussionMessagesStatus = "loading";
+  void loadDiscussionMessages(itemKey);
+}
+
+async function sendDiscussionMessage() {
+  if (bowDiscussionSendBusy) return;
+  const input = $("bowDiscussionInput");
+  const body = String(input?.value ?? bowDiscussionDraft).trim();
+  if (!body || !discussionId || !currentUser) return;
+  if (body.length > 1000) {
+    notify(waitText("messageSendError"));
+    return;
+  }
+  if (bowDiscussionMessagesStatus !== "ready") return;
+
+  bowDiscussionSendBusy = true;
+  const sendButton = $("bowDiscussionSend");
+  if (sendButton) sendButton.disabled = true;
+  try {
+    if (!await ensureCloudConnection()) throw new Error("Cloud connection unavailable.");
+    const { data, error } = await supabaseClient
+      .from("bow_item_messages")
+      .insert({
+        item_id: String(discussionId),
+        sender_id: currentUser.id,
+        body
+      })
+      .select("id,item_id,sender_id,body,created_at")
+      .single();
+    if (error) throw error;
+    bowDiscussionDraft = "";
+    addDiscussionMessage(data);
+    renderWaitModal();
+  } catch (error) {
+    console.error("Could not send discussion message:", error);
+    notify(waitText("messageSendError"));
+  } finally {
+    bowDiscussionSendBusy = false;
+    const inputAfterSend = $("bowDiscussionInput");
+    const button = $("bowDiscussionSend");
+    const canCompose = bowDiscussionMessagesStatus === "ready" && Boolean(discussionId);
+    if (inputAfterSend) inputAfterSend.disabled = !canCompose;
+    if (button) button.disabled = !canCompose;
+  }
 }
 
 /* ==========================================
@@ -2005,6 +2195,19 @@ function createWaitModal() {
     }
   });
 
+  modal.addEventListener("submit", async (event) => {
+    const form = event.target.closest("[data-discussion-compose]");
+    if (!form) return;
+    event.preventDefault();
+    await sendDiscussionMessage();
+  });
+
+  modal.addEventListener("input", (event) => {
+    if (event.target.matches("[data-discussion-input]")) {
+      bowDiscussionDraft = event.target.value;
+    }
+  });
+
   return modal;
 }
 
@@ -2043,6 +2246,7 @@ function closeWaitModal() {
   modal.classList.remove("open");
   modal.hidden = true;
   modal.setAttribute("aria-hidden", "true");
+  clearDiscussionMessageContext();
 
   document.body.classList.remove("locked");
 
@@ -2247,11 +2451,15 @@ function renderWaitModal() {
   const selected = waitModalTab === "waiting" && visibleItems.find(item => String(item.id) === discussionId);
   grid.classList.toggle('bow-disc-detail-grid', Boolean(selected));
   if (selected) {
-    const w = {ko:['목록으로','친구와 나눈 이야기','메시지 기능은 다음 단계에서 연결해요.','메시지 입력…','음성 녹음','보내기','조금 더 고민할래요','같은 카테고리의 구매한 소품'],zh:['返回列表','和朋友的留言','下一阶段连接真实消息功能。','输入消息…','录音','发送','继续考虑','同类已购物品'],en:['Back to list','Conversation','Messaging will be connected in the next step.','Write a message…','Record voice','Send','Keep thinking','Purchased in this category']}[currentLang];
+    activateDiscussionMessages(selected.id);
     const count = finds.filter(x => getItemStatus(x)==='bought' && x.category===selected.category).length;
-    grid.innerHTML = `<section class="bow-disc-detail"><button type="button" class="bow-disc-back" data-discussion-back>${w[0]}</button><div class="bow-disc-summary"><div class="wait-product-photo">${renderWaitPhoto(selected)}</div><div><strong>${escapeHTML(formatPrice(selected))}</strong><p>${escapeHTML(t(CATEGORY_KEYS[selected.category] || 'catOther'))}</p><p>${escapeHTML(selected.name)}</p></div></div><p class="bow-disc-similar">${w[7]}: ${count}</p><h3>${w[1]}</h3><div class="bow-disc-empty">${w[2]}</div><div class="bow-disc-compose"><input disabled placeholder="${w[3]}"><button disabled type="button" aria-label="${w[4]}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></svg></button><button disabled type="button">${w[5]}</button></div><div class="bow-disc-actions">${selected.user_id === currentUser?.id ? renderWaitActions(selected) : ""}</div><button type="button" class="bow-disc-back" data-discussion-back>${w[6]}</button></section>`;
+    const setupReady = bowDiscussionMessagesStatus === "ready";
+    const messages = renderDiscussionMessages();
+    grid.innerHTML = `<section class="bow-disc-detail"><button type="button" class="bow-disc-back" data-discussion-back>${escapeHTML(currentLang === "zh" ? "返回列表" : currentLang === "en" ? "Back to list" : "목록으로")}</button><div class="bow-disc-summary"><div class="wait-product-photo">${renderWaitPhoto(selected)}</div><div><strong>${escapeHTML(formatPrice(selected))}</strong><p>${escapeHTML(t(CATEGORY_KEYS[selected.category] || 'catOther'))}</p><p>${escapeHTML(selected.name)}</p></div></div><p class="bow-disc-similar">${escapeHTML(currentLang === "zh" ? "同类已购买物品" : currentLang === "en" ? "Bought in this category" : "같은 카테고리의 구매한 소품")}: ${count}</p><h3>${escapeHTML(currentLang === "zh" ? "和朋友的留言" : currentLang === "en" ? "Conversation with your friend" : "친구와 나눈 이야기")}</h3><div class="bow-disc-messages" id="bowDiscussionMessages" aria-live="polite" aria-relevant="additions text">${messages}</div><form class="bow-disc-compose" data-discussion-compose><input id="bowDiscussionInput" data-discussion-input type="text" maxlength="1000" autocomplete="off" placeholder="${escapeHTML(waitText("messagePlaceholder"))}" value="${escapeHTML(bowDiscussionDraft)}" ${setupReady && !bowDiscussionSendBusy ? "" : "disabled"}><button class="bow-disc-voice" disabled type="button" aria-label="${escapeHTML(currentLang === "zh" ? "录音" : currentLang === "en" ? "Record voice" : "음성 녹음")}" title="${escapeHTML(currentLang === "zh" ? "下一阶段添加语音留言" : currentLang === "en" ? "Voice messages are next" : "음성 메시지는 다음 단계에서 연결돼요")}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></svg></button><button id="bowDiscussionSend" class="bow-disc-send" type="submit" ${setupReady && !bowDiscussionSendBusy ? "" : "disabled"}>${escapeHTML(waitText("messageSend"))}</button></form><div class="bow-disc-actions">${selected.user_id === currentUser?.id ? renderWaitActions(selected) : ""}</div><button type="button" class="bow-disc-back" data-discussion-back>${escapeHTML(currentLang === "zh" ? "继续考虑" : currentLang === "en" ? "Keep thinking" : "조금 더 고민할래요")}</button></section>`;
+    renderDiscussionThread();
     return;
   }
+  if (bowDiscussionMessageItemId) clearDiscussionMessageContext();
   discussionId = null;
   if (!visibleItems.length) {
     grid.innerHTML = `
