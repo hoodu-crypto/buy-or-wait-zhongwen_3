@@ -2330,3 +2330,130 @@ html body #waitModal.wait-modal .bow-disc-compose .bow-disc-send {
     border-radius: 999px !important;
   }
 }
+
+/* Voice notes in the friend discussion */
+html body #waitModal.wait-modal .bow-disc-audio {
+  display: block;
+  width: min(100%, 320px);
+  min-height: 40px;
+  margin-top: 5px;
+}
+html body #waitModal.wait-modal .bow-disc-audio-duration,
+html body #waitModal.wait-modal .bow-disc-audio-pending {
+  display: block;
+  margin-top: 4px;
+  color: #806f62;
+  font-size: 12px;
+}
+html body #waitModal.wait-modal .bow-disc-compose {
+  position: relative;
+}
+html body #waitModal.wait-modal .bow-disc-compose .bow-disc-voice.is-recording {
+  color: #fff;
+  background: #c75f68;
+  animation: bowVoicePulse 1.2s ease-in-out infinite;
+}
+html body #waitModal.wait-modal .bow-disc-voice-status:not(:empty) {
+  position: absolute;
+  right: 60px;
+  bottom: calc(100% - 2px);
+  max-width: min(70vw, 250px);
+  padding: 5px 9px;
+  border-radius: 12px;
+  background: #fff0d5;
+  color: #67463b;
+  font-size: 12px;
+  line-height: 1.35;
+}
+@keyframes bowVoicePulse {
+  50% { box-shadow: 0 0 0 5px #c75f6833; }
+}
+
+@media (max-width: 600px) {
+  html body #waitModal.wait-modal .bow-disc-compose {
+    position: sticky;
+  }
+}
+
+/* Compact voice bubbles scale with the recording duration. */
+html body #waitModal.wait-modal .bow-disc-voice-player {
+  width: fit-content;
+  max-width: 100%;
+}
+html body #waitModal.wait-modal .bow-disc-audio {
+  display: none !important;
+}
+html body #waitModal.wait-modal .bow-disc-voice-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: min(var(--voice-note-width, 100px), 100%);
+  min-width: 88px;
+  min-height: 40px;
+  padding: 7px 11px;
+  border: 1px solid #ead9d2;
+  border-radius: 999px;
+  background: #fff;
+  color: #5b4036;
+  cursor: pointer;
+}
+html body #waitModal.wait-modal .bow-disc-message.is-mine .bow-disc-voice-note {
+  border-color: #eacbd8;
+  background: #fff8fa;
+}
+html body #waitModal.wait-modal .bow-disc-voice-note svg {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+html body #waitModal.wait-modal .bow-disc-pause-icon,
+html body #waitModal.wait-modal .bow-disc-voice-note.is-playing .bow-disc-play-icon {
+  display: none;
+}
+html body #waitModal.wait-modal .bow-disc-voice-note.is-playing .bow-disc-pause-icon {
+  display: block;
+}
+html body #waitModal.wait-modal .bow-disc-wave {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 15px;
+  height: 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+}
+html body #waitModal.wait-modal .bow-disc-wave i {
+  width: 2px;
+  height: 5px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: .62;
+}
+html body #waitModal.wait-modal .bow-disc-wave i:nth-child(2),
+html body #waitModal.wait-modal .bow-disc-wave i:nth-child(8) { height: 9px; }
+html body #waitModal.wait-modal .bow-disc-wave i:nth-child(3),
+html body #waitModal.wait-modal .bow-disc-wave i:nth-child(6) { height: 14px; }
+html body #waitModal.wait-modal .bow-disc-wave i:nth-child(4) { height: 18px; }
+html body #waitModal.wait-modal .bow-disc-voice-note.is-playing .bow-disc-wave i {
+  animation: bowVoiceWave .65s ease-in-out infinite alternate;
+}
+html body #waitModal.wait-modal .bow-disc-voice-note.is-playing .bow-disc-wave i:nth-child(2n) {
+  animation-delay: .2s;
+}
+html body #waitModal.wait-modal .bow-disc-voice-duration {
+  flex: 0 0 auto;
+  color: #806f62;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+@keyframes bowVoiceWave {
+  to { transform: scaleY(.35); }
+}
+@media (max-width: 600px) {
+  html body #waitModal.wait-modal .bow-disc-voice-note {
+    min-height: 38px;
+    padding: 6px 10px;
+  }
+}

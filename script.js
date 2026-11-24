@@ -1843,7 +1843,19 @@ const WAIT_MODAL_I18N = {
     messageSend: "보내기",
     messageMe: "나",
     messageFriend: "친구",
-    messageSendError: "메시지를 보내지 못했어요. 다시 시도해 주세요."
+    messageSendError: "메시지를 보내지 못했어요. 다시 시도해 주세요.",
+    voicePlay: "음성 재생",
+    voicePause: "음성 일시정지",
+    voiceStart: "음성 녹음 시작",
+    voiceStop: "녹음 멈추고 보내기",
+    voiceRecording: "녹음 중",
+    voiceUploading: "음성을 보내는 중...",
+    voiceUnsupported: "이 브라우저에서는 음성 녹음을 지원하지 않아요.",
+    voicePermission: "마이크 권한을 허용해 주세요.",
+    voiceEmpty: "1초 이상 녹음해 주세요.",
+    voiceSendError: "음성 메시지를 보내지 못했어요.",
+    voiceSaved: "음성 메시지를 저장했어요.",
+    voicePlaybackError: "음성을 불러오지 못했어요. 페이지를 다시 열어 주세요."
   },
 
   zh: {
@@ -1874,7 +1886,19 @@ const WAIT_MODAL_I18N = {
     messageSend: "发送",
     messageMe: "我",
     messageFriend: "朋友",
-    messageSendError: "留言发送失败，请重试。"
+    messageSendError: "留言发送失败，请重试。",
+    voicePlay: "播放语音",
+    voicePause: "暂停语音",
+    voiceStart: "开始录音",
+    voiceStop: "停止并发送录音",
+    voiceRecording: "正在录音",
+    voiceUploading: "正在发送语音…",
+    voiceUnsupported: "此浏览器不支持语音录音。",
+    voicePermission: "请允许使用麦克风。",
+    voiceEmpty: "请至少录音 1 秒。",
+    voiceSendError: "语音留言发送失败。",
+    voiceSaved: "语音已保存并发送。",
+    voicePlaybackError: "语音加载失败，请重新打开页面。"
   },
 
   en: {
@@ -1905,7 +1929,19 @@ const WAIT_MODAL_I18N = {
     messageSend: "Send",
     messageMe: "Me",
     messageFriend: "Friend",
-    messageSendError: "Message could not be sent. Please try again."
+    messageSendError: "Message could not be sent. Please try again.",
+    voicePlay: "Play voice message",
+    voicePause: "Pause voice message",
+    voiceStart: "Start voice recording",
+    voiceStop: "Stop and send recording",
+    voiceRecording: "Recording",
+    voiceUploading: "Sending voice message…",
+    voiceUnsupported: "Voice recording is not supported in this browser.",
+    voicePermission: "Please allow microphone access.",
+    voiceEmpty: "Record for at least one second.",
+    voiceSendError: "Voice message could not be sent.",
+    voiceSaved: "Voice message saved and sent.",
+    voicePlaybackError: "Could not load audio. Reopen this page."
   }
 };
 
@@ -1921,6 +1957,13 @@ let bowDiscussionMessagesErrorDetail = "";
 let bowDiscussionMessageChannel = null;
 let bowDiscussionDraft = "";
 let bowDiscussionSendBusy = false;
+const BOW_VOICE_BUCKET = "bow-item-voice";
+let bowDiscussionRecorder = null;
+let bowDiscussionRecordingStream = null;
+let bowDiscussionAudioChunks = [];
+let bowDiscussionRecordingStartedAt = 0;
+let bowDiscussionRecordingTimer = null;
+let bowDiscussionVoiceBusy = false;
 
 function waitText(key) {
   return (
@@ -1951,9 +1994,31 @@ function renderDiscussionMessages() {
     const time = message.created_at
       ? new Intl.DateTimeFormat(locale, { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(message.created_at))
       : "";
-    const body = escapeHTML(message.body || "").replace(/\r?\n/g, "<br>");
-    return `<article class="bow-disc-message ${isMine ? "is-mine" : "is-friend"}"><div class="bow-disc-message-meta"><strong>${escapeHTML(sender)}</strong><time datetime="${escapeHTML(message.created_at || "")}">${escapeHTML(time)}</time></div><p>${body}</p></article>`;
+    const body = message.body ? `<p>${escapeHTML(message.body).replace(/\r?\n/g, "<br>")}</p>` : "";
+    const voiceSeconds = Math.max(1, Math.ceil((message.voice_duration_ms || 1000) / 1000));
+    const voiceWidth = Math.min(238, Math.max(92, 88 + Math.round(voiceSeconds * 2.4)));
+    const voiceDuration = `${Math.floor(voiceSeconds / 60)}:${String(voiceSeconds % 60).padStart(2, "0")}`;
+    const audio = message.voice_path
+      ? (message.voice_url
+        ? `<div class="bow-disc-voice-player"><button class="bow-disc-voice-note" type="button" data-discussion-play="${escapeHTML(message.id)}" style="--voice-note-width:${voiceWidth}px" aria-label="${escapeHTML(waitText("voicePlay"))}"><svg class="bow-disc-play-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.8c0-.8.9-1.3 1.6-.8l9.2 6.1a1.1 1.1 0 0 1 0 1.8l-9.2 6.1c-.7.5-1.6 0-1.6-.8z"/></svg><svg class="bow-disc-pause-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 4h3.5v12H5zM11.5 4H15v12h-3.5z"/></svg><span class="bow-disc-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="bow-disc-voice-duration">${voiceDuration}</span></button><audio class="bow-disc-audio" data-discussion-audio="${escapeHTML(message.id)}" preload="none" src="${escapeHTML(message.voice_url)}"></audio></div>`
+        : `<small class="bow-disc-audio-pending">${escapeHTML(waitText("voicePlaybackError"))}</small>`)
+      : "";
+    return `<article class="bow-disc-message ${isMine ? "is-mine" : "is-friend"}"><div class="bow-disc-message-meta"><strong>${escapeHTML(sender)}</strong><time datetime="${escapeHTML(message.created_at || "")}">${escapeHTML(time)}</time></div>${body}${audio}${duration}</article>`;
   }).join("");
+}
+
+async function prepareDiscussionMessage(message) {
+  if (!message?.voice_path || !supabaseClient) return message;
+  try {
+    const { data, error } = await supabaseClient.storage
+      .from(BOW_VOICE_BUCKET)
+      .createSignedUrl(message.voice_path, 60 * 60);
+    if (error) throw error;
+    return { ...message, voice_url: data?.signedUrl || "" };
+  } catch (error) {
+    console.error("Could not create voice playback URL:", error);
+    return { ...message, voice_url: "" };
+  }
 }
 
 function renderDiscussionThread() {
@@ -1983,6 +2048,7 @@ function clearDiscussionMessageChannel() {
 }
 
 function clearDiscussionMessageContext() {
+  cancelDiscussionVoiceRecording();
   clearDiscussionMessageChannel();
   bowDiscussionMessages = [];
   bowDiscussionMessageItemId = "";
@@ -2013,7 +2079,9 @@ async function loadDiscussionMessages(itemId) {
       schema: "public",
       table: "bow_item_messages",
       filter: `item_id=eq.${itemKey}`
-    }, (payload) => addDiscussionMessage(payload.new))
+    }, (payload) => {
+      void prepareDiscussionMessage(payload.new).then(addDiscussionMessage);
+    })
     .subscribe((status) => {
       if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
         console.warn("Discussion realtime subscription status:", status);
@@ -2023,15 +2091,16 @@ async function loadDiscussionMessages(itemId) {
   try {
     const { data, error } = await supabaseClient
       .from("bow_item_messages")
-      .select("id,item_id,sender_id,body,created_at")
+      .select("id,item_id,sender_id,body,voice_path,voice_duration_ms,created_at")
       .eq("item_id", itemKey)
       .order("created_at", { ascending: true });
 
     if (error) throw error;
     if (bowDiscussionMessageItemId !== itemKey) return;
 
+    const preparedMessages = await Promise.all((data || []).map(prepareDiscussionMessage));
     const merged = new Map();
-    for (const message of data || []) merged.set(String(message.id), message);
+    for (const message of preparedMessages) merged.set(String(message.id), message);
     for (const message of bowDiscussionMessages) merged.set(String(message.id), message);
     bowDiscussionMessages = [...merged.values()].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
     bowDiscussionMessagesStatus = "ready";
@@ -2094,6 +2163,210 @@ async function sendDiscussionMessage() {
     const canCompose = Boolean(currentUser) && Boolean(discussionId) && !bowDiscussionSendBusy;
     if (inputAfterSend) inputAfterSend.disabled = !canCompose;
     if (button) button.disabled = !canCompose;
+  }
+}
+
+async function toggleDiscussionAudio(button) {
+  const messageId = button?.dataset.discussionPlay;
+  const audio = [...document.querySelectorAll("audio[data-discussion-audio]")]
+    .find((element) => element.dataset.discussionAudio === messageId);
+  if (!audio) return;
+
+  if (!audio.paused) {
+    audio.pause();
+    return;
+  }
+
+  document.querySelectorAll("audio[data-discussion-audio]").forEach((otherAudio) => {
+    if (otherAudio !== audio) otherAudio.pause();
+  });
+  document.querySelectorAll("[data-discussion-play]").forEach((playButton) => {
+    playButton.classList.remove("is-playing");
+    playButton.setAttribute("aria-label", waitText("voicePlay"));
+  });
+
+  audio.onplay = () => {
+    button.classList.add("is-playing");
+    button.setAttribute("aria-label", waitText("voicePause"));
+  };
+  audio.onpause = () => {
+    button.classList.remove("is-playing");
+    button.setAttribute("aria-label", waitText("voicePlay"));
+  };
+  audio.onended = () => {
+    button.classList.remove("is-playing");
+    button.setAttribute("aria-label", waitText("voicePlay"));
+  };
+  try {
+    await audio.play();
+  } catch (error) {
+    console.error("Could not play discussion voice message:", error);
+    notify(waitText("voicePlaybackError"));
+  }
+}
+
+function stopDiscussionRecordingTracks() {
+  if (bowDiscussionRecordingTimer) {
+    clearInterval(bowDiscussionRecordingTimer);
+    bowDiscussionRecordingTimer = null;
+  }
+  if (bowDiscussionRecordingStream) {
+    for (const track of bowDiscussionRecordingStream.getTracks()) track.stop();
+    bowDiscussionRecordingStream = null;
+  }
+}
+
+function cancelDiscussionVoiceRecording() {
+  const recorder = bowDiscussionRecorder;
+  bowDiscussionRecorder = null;
+  if (recorder && recorder.state !== "inactive") {
+    recorder.onstop = null;
+    try { recorder.stop(); } catch (_) {}
+  }
+  stopDiscussionRecordingTracks();
+  bowDiscussionAudioChunks = [];
+  bowDiscussionRecordingStartedAt = 0;
+}
+
+function updateDiscussionRecordingStatus() {
+  const status = $("bowDiscussionVoiceStatus");
+  if (!status) return;
+  if (bowDiscussionVoiceBusy) {
+    status.textContent = waitText("voiceUploading");
+    return;
+  }
+  if (bowDiscussionRecorder?.state === "recording") {
+    const seconds = Math.floor((Date.now() - bowDiscussionRecordingStartedAt) / 1000);
+    status.textContent = `${waitText("voiceRecording")} ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+    return;
+  }
+  status.textContent = "";
+}
+
+function chooseDiscussionAudioMimeType() {
+  if (typeof MediaRecorder === "undefined" || typeof MediaRecorder.isTypeSupported !== "function") return "";
+  return ["audio/mp4", "audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus"]
+    .find((type) => MediaRecorder.isTypeSupported(type)) || "";
+}
+
+function discussionAudioExtension(mimeType) {
+  if (mimeType.includes("mp4") || mimeType.includes("aac")) return "m4a";
+  if (mimeType.includes("ogg")) return "ogg";
+  if (mimeType.includes("wav")) return "wav";
+  return "webm";
+}
+
+async function uploadDiscussionVoice(blob, durationMs, itemId) {
+  if (!blob?.size || !currentUser) {
+    notify(waitText("voiceEmpty"));
+    return;
+  }
+  if (blob.size > 10 * 1024 * 1024) {
+    notify(waitText("voiceSendError"));
+    return;
+  }
+  bowDiscussionVoiceBusy = true;
+  renderWaitModal();
+  let uploadedPath = "";
+  try {
+    if (!await ensureCloudConnection()) throw new Error("Cloud connection unavailable.");
+    const messageId = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    const mimeType = blob.type || "audio/webm";
+    const path = `${itemId}/${currentUser.id}/${messageId}.${discussionAudioExtension(mimeType)}`;
+    const { error: uploadError } = await supabaseClient.storage
+      .from(BOW_VOICE_BUCKET)
+      .upload(path, blob, { contentType: mimeType, upsert: false });
+    if (uploadError) throw uploadError;
+    uploadedPath = path;
+
+    const { data, error } = await supabaseClient
+      .from("bow_item_messages")
+      .insert({
+        item_id: String(itemId),
+        sender_id: currentUser.id,
+        body: null,
+        voice_path: path,
+        voice_duration_ms: durationMs
+      })
+      .select("id,item_id,sender_id,body,voice_path,voice_duration_ms,created_at")
+      .single();
+    if (error) throw error;
+    addDiscussionMessage(await prepareDiscussionMessage(data));
+    notify(waitText("voiceSaved"));
+  } catch (error) {
+    console.error("Could not send discussion voice message:", error);
+    if (uploadedPath && supabaseClient) {
+      void supabaseClient.storage.from(BOW_VOICE_BUCKET).remove([uploadedPath]);
+    }
+    const detail = String(error?.message || "").slice(0, 180);
+    notify(detail ? `${waitText("voiceSendError")} (${detail})` : waitText("voiceSendError"));
+  } finally {
+    bowDiscussionVoiceBusy = false;
+    if (discussionId && String(discussionId) === String(itemId)) renderWaitModal();
+  }
+}
+
+async function toggleDiscussionVoiceRecording() {
+  if (bowDiscussionRecorder?.state === "recording") {
+    bowDiscussionRecorder.stop();
+    return;
+  }
+  if (bowDiscussionVoiceBusy || !discussionId || !currentUser) return;
+  if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+    notify(waitText("voiceUnsupported"));
+    return;
+  }
+
+  const itemId = String(discussionId);
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    if (String(discussionId) !== itemId || !$('waitModal')?.classList.contains('open')) {
+      for (const track of stream.getTracks()) track.stop();
+      return;
+    }
+    bowDiscussionRecordingStream = stream;
+    bowDiscussionAudioChunks = [];
+    const mimeType = chooseDiscussionAudioMimeType();
+    const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+    bowDiscussionRecorder = recorder;
+    bowDiscussionRecordingStartedAt = Date.now();
+    recorder.ondataavailable = (event) => {
+      if (event.data?.size) bowDiscussionAudioChunks.push(event.data);
+    };
+    recorder.onerror = (event) => {
+      console.error("Discussion voice recorder error:", event.error || event);
+      notify(waitText("voiceSendError"));
+    };
+    recorder.onstop = () => {
+      const chunks = bowDiscussionAudioChunks;
+      const durationMs = Math.max(500, Date.now() - bowDiscussionRecordingStartedAt);
+      const blob = new Blob(chunks, { type: recorder.mimeType || mimeType || "audio/webm" });
+      bowDiscussionRecorder = null;
+      bowDiscussionAudioChunks = [];
+      bowDiscussionRecordingStartedAt = 0;
+      stopDiscussionRecordingTracks();
+      if (!blob.size) {
+        notify(waitText("voiceEmpty"));
+        renderWaitModal();
+        return;
+      }
+      void uploadDiscussionVoice(blob, durationMs, itemId);
+    };
+    // Request periodic chunks so short recordings are still captured reliably.
+    recorder.start(500);
+    renderWaitModal();
+    bowDiscussionRecordingTimer = setInterval(() => {
+      updateDiscussionRecordingStatus();
+      if (Date.now() - bowDiscussionRecordingStartedAt >= 60_000 && bowDiscussionRecorder?.state === "recording") {
+        bowDiscussionRecorder.stop();
+      }
+    }, 500);
+  } catch (error) {
+    console.error("Could not start discussion voice recording:", error);
+    notify(error?.name === "NotAllowedError" ? waitText("voicePermission") : waitText("voiceSendError"));
+    stopDiscussionRecordingTracks();
+    bowDiscussionRecorder = null;
+    bowDiscussionAudioChunks = [];
   }
 }
 
@@ -2165,6 +2438,12 @@ function createWaitModal() {
       closeWaitModal();
       return;
     }
+
+    const playButton = event.target.closest("[data-discussion-play]");
+    if (playButton) { void toggleDiscussionAudio(playButton); return; }
+
+    const voiceButton = event.target.closest("[data-discussion-voice]");
+    if (voiceButton) { void toggleDiscussionVoiceRecording(); return; }
 
     const detail = event.target.closest('[data-discussion-id]');
     if (detail) { discussionId = detail.dataset.discussionId; renderWaitModal(); return; }
@@ -2463,7 +2742,7 @@ function renderWaitModal() {
     const count = finds.filter(x => getItemStatus(x)==='bought' && x.category===selected.category).length;
     const canCompose = Boolean(currentUser) && Boolean(discussionId) && !bowDiscussionSendBusy;
     const messages = renderDiscussionMessages();
-    grid.innerHTML = `<section class="bow-disc-detail"><button type="button" class="bow-disc-back" data-discussion-back>${escapeHTML(currentLang === "zh" ? "返回列表" : currentLang === "en" ? "Back to list" : "목록으로")}</button><div class="bow-disc-summary"><div class="wait-product-photo">${renderWaitPhoto(selected)}</div><div><strong>${escapeHTML(formatPrice(selected))}</strong><p>${escapeHTML(t(CATEGORY_KEYS[selected.category] || 'catOther'))}</p><p>${escapeHTML(selected.name)}</p></div></div><p class="bow-disc-similar">${escapeHTML(currentLang === "zh" ? "同类已购买物品" : currentLang === "en" ? "Bought in this category" : "같은 카테고리의 구매한 소품")}: ${count}</p><h3>${escapeHTML(currentLang === "zh" ? "和朋友的留言" : currentLang === "en" ? "Conversation with your friend" : "친구와 나눈 이야기")}</h3><div class="bow-disc-messages" id="bowDiscussionMessages" aria-live="polite" aria-relevant="additions text">${messages}</div><form class="bow-disc-compose" data-discussion-compose><input id="bowDiscussionInput" data-discussion-input type="text" maxlength="1000" autocomplete="off" placeholder="${escapeHTML(waitText("messagePlaceholder"))}" value="${escapeHTML(bowDiscussionDraft)}" ${canCompose ? "" : "disabled"}><button class="bow-disc-voice" disabled type="button" aria-label="${escapeHTML(currentLang === "zh" ? "录音" : currentLang === "en" ? "Record voice" : "음성 녹음")}" title="${escapeHTML(currentLang === "zh" ? "下一阶段添加语音留言" : currentLang === "en" ? "Voice messages are next" : "음성 메시지는 다음 단계에서 연결돼요")}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></svg></button><button id="bowDiscussionSend" class="bow-disc-send" type="submit" ${canCompose ? "" : "disabled"}>${escapeHTML(waitText("messageSend"))}</button></form><div class="bow-disc-actions">${selected.user_id === currentUser?.id ? renderWaitActions(selected) : ""}</div></section>`;
+    grid.innerHTML = `<section class="bow-disc-detail"><button type="button" class="bow-disc-back" data-discussion-back>${escapeHTML(currentLang === "zh" ? "返回列表" : currentLang === "en" ? "Back to list" : "목록으로")}</button><div class="bow-disc-summary"><div class="wait-product-photo">${renderWaitPhoto(selected)}</div><div><strong>${escapeHTML(formatPrice(selected))}</strong><p>${escapeHTML(t(CATEGORY_KEYS[selected.category] || 'catOther'))}</p><p>${escapeHTML(selected.name)}</p></div></div><p class="bow-disc-similar">${escapeHTML(currentLang === "zh" ? "同类已购买物品" : currentLang === "en" ? "Bought in this category" : "같은 카테고리의 구매한 소품")}: ${count}</p><h3>${escapeHTML(currentLang === "zh" ? "和朋友的留言" : currentLang === "en" ? "Conversation with your friend" : "친구와 나눈 이야기")}</h3><div class="bow-disc-messages" id="bowDiscussionMessages" aria-live="polite" aria-relevant="additions text">${messages}</div><form class="bow-disc-compose" data-discussion-compose><input id="bowDiscussionInput" data-discussion-input type="text" maxlength="1000" autocomplete="off" placeholder="${escapeHTML(waitText("messagePlaceholder"))}" value="${escapeHTML(bowDiscussionDraft)}" ${canCompose ? "" : "disabled"}><button class="bow-disc-voice${bowDiscussionRecorder?.state === "recording" ? " is-recording" : ""}" data-discussion-voice type="button" aria-pressed="${bowDiscussionRecorder?.state === "recording" ? "true" : "false"}" aria-label="${escapeHTML(waitText(bowDiscussionRecorder?.state === "recording" ? "voiceStop" : "voiceStart"))}" title="${escapeHTML(waitText(bowDiscussionRecorder?.state === "recording" ? "voiceStop" : "voiceStart"))}" ${canCompose && !bowDiscussionVoiceBusy ? "" : "disabled"}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></svg></button><span class="bow-disc-voice-status" id="bowDiscussionVoiceStatus">${bowDiscussionRecorder?.state === "recording" ? escapeHTML(waitText("voiceRecording")) : bowDiscussionVoiceBusy ? escapeHTML(waitText("voiceUploading")) : ""}</span><button id="bowDiscussionSend" class="bow-disc-send" type="submit" ${canCompose ? "" : "disabled"}>${escapeHTML(waitText("messageSend"))}</button></form><div class="bow-disc-actions">${selected.user_id === currentUser?.id ? renderWaitActions(selected) : ""}</div></section>`;
     renderDiscussionThread();
     return;
   }
