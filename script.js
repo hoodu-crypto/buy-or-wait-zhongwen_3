@@ -2763,6 +2763,7 @@ function renderWaitModal() {
     : getItemsByStatus("bought");
 
   const selected = waitModalTab === "waiting" && visibleItems.find(item => String(item.id) === discussionId);
+  modal.classList.toggle("is-chat-detail", Boolean(selected));
   grid.classList.toggle('bow-disc-detail-grid', Boolean(selected));
   if (selected) {
     activateDiscussionMessages(selected.id);

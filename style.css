@@ -2491,3 +2491,10 @@ html body #waitModal.wait-modal .bow-disc-message.is-friend.has-voice .bow-disc-
 html body #waitModal.wait-modal .bow-disc-message.is-mine.has-voice .bow-disc-message-meta {
   justify-content: flex-end;
 }
+
+/* Keep the selected-item conversation focused on its messages. */
+html body #waitModal.wait-modal.is-chat-detail .wait-modal-header,
+html body #waitModal.wait-modal.is-chat-detail .wait-modal-tabs,
+html body #waitModal.wait-modal.is-chat-detail .wait-modal-section-title {
+  display: none !important;
+}
