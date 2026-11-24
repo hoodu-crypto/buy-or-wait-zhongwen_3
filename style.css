@@ -2322,7 +2322,20 @@ html body #waitModal.wait-modal .bow-disc-compose .bow-disc-send {
   }
 
   html body #waitModal.wait-modal .bow-disc-actions {
-    grid-template-columns: minmax(0, 1fr) !important;
+    order: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-bottom: 2px;
+  }
+
+  html body #waitModal.wait-modal .bow-disc-actions .wait-action {
+    min-width: 0;
+    padding: 10px 6px;
+    font-size: 14px;
+  }
+
+  html body #waitModal.wait-modal .bow-disc-compose {
+    order: 2;
   }
 
   html body #waitModal.wait-modal .bow-disc-back {
