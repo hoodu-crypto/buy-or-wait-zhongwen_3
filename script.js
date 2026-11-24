@@ -46,10 +46,10 @@ const I18N = {
     stepNumber2: "02 / 기다리기",
     stepNumber3: "03 / 결정하기",
     step1: "마음에 담기",
-    step2: "잠깐 기다리기",
+    step2: "함께 고민하기",
     step3: "결정하기",
     stepButton1: "물건 추가하기",
-    stepButton2: "위시리스트 보기",
+    stepButton2: "함께 고민하기",
     stepButton3: "나의 발견 보기",
     findsKicker: "♡ 나만의 작은 컬렉션",
     findsTitle: '나의 작은 발견<span class="sparkle">✳</span>',
@@ -130,13 +130,13 @@ const I18N = {
     stepsTitle: "<span class=\"steps-title-small\">现在喜欢，</span><span class=\"steps-title-large\">以后再决定。</span>",
     stepsDesc: "从发现心动，到等待考虑，再到已购收藏",
     stepNumber1: "01 / 发现心动",
-    stepNumber2: "02 / 再等等",
+    stepNumber2: "02 / 一起考虑",
     stepNumber3: "03 / 已购小物件",
     step1: "记录心动",
-    step2: "再等等",
+    step2: "一起考虑",
     step3: "已购小物件",
     stepButton1: "添加物品",
-    stepButton2: "查看心愿清单",
+    stepButton2: "一起考虑",
     stepButton3: "查看已购小物",
     findsKicker: "♡ 我的小物记录",
     findsTitle: '我的心动小物<span class="sparkle">✳</span>',
@@ -220,10 +220,10 @@ const I18N = {
     stepNumber2: "02 / PAUSE IT",
     stepNumber3: "03 / KEEP IT",
     step1: "Catch the crush",
-    step2: "Give it a moment",
+    step2: "Think together",
     step3: "Choose your ending",
     stepButton1: "ADD A FIND",
-    stepButton2: "SEE MY LIST",
+    stepButton2: "THINK TOGETHER",
     stepButton3: "MY LITTLE FINDS",
     findsKicker: "♡ YOUR VERY OWN COLLECTION",
     findsTitle: 'My little finds<span class="sparkle">✳</span>',
@@ -542,9 +542,10 @@ function getCategoryLabel(category) {
 }
 
 function saveLocalBackup() {
+  if (!currentUser) return;
   try {
     localStorage.setItem(
-      STORAGE_KEY,
+      STORAGE_KEY + ":" + currentUser.id,
       JSON.stringify(finds)
     );
   } catch (error) {
@@ -557,7 +558,7 @@ function saveLocalBackup() {
 
 function loadLocalBackup() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = currentUser ? localStorage.getItem(STORAGE_KEY + ":" + currentUser.id) : null;
 
     if (!raw) {
       return [];
@@ -885,21 +886,10 @@ async function initializeSupabase() {
 
       let session = sessionResult.data.session;
 
-      if (!session) {
-        const loginResult =
-          await supabaseClient.auth.signInAnonymously();
-
-        if (loginResult.error) {
-          throw loginResult.error;
-        }
-
-        session = loginResult.data.session;
-      }
-
-      if (!session?.user) {
-        throw new Error(
-          "Anonymous authentication failed."
-        );
+      if (!session?.user || session.user.is_anonymous || !session.user.email) {
+        currentUser = null;
+        cloudReady = false;
+        return false;
       }
 
       currentUser = session.user;
@@ -907,6 +897,8 @@ async function initializeSupabase() {
       await loadCloudFinds();
 
       cloudReady = true;
+      document.body.classList.remove("bow-auth-pending");
+      $("bowLogin").hidden = true;
 
       console.log(
         "Supabase connected successfully.",
@@ -925,7 +917,7 @@ async function initializeSupabase() {
 
       cloudReady = false;
 
-      finds = loadLocalBackup();
+      finds = [];
 
       if (typeof render === "function") {
         render();
@@ -1824,7 +1816,7 @@ function initializeFindsEvents() {
 
 const WAIT_MODAL_I18N = {
   ko: {
-    title: "잠깐만 기다려볼까?",
+    title: "함께 고민하기",
     description:
       "오늘도 천천히 마음에 담아둔 물건을 살펴봐요.",
     waiting: "기다리는 중",
@@ -1847,7 +1839,7 @@ const WAIT_MODAL_I18N = {
   },
 
   zh: {
-    title: "要不要再等等？",
+    title: "一起考虑",
     description:
       "今天也慢慢看看收藏起来的心动小物吧。",
     waiting: "等待中",
@@ -1870,7 +1862,7 @@ const WAIT_MODAL_I18N = {
   },
 
   en: {
-    title: "Shall we wait a little?",
+    title: "Think together",
     description:
       "Take another look at the little things you love.",
     waiting: "Waiting",
@@ -1894,6 +1886,8 @@ const WAIT_MODAL_I18N = {
 };
 
 let waitModalTab = "waiting";
+let discussionId = null;
+let bowSharedItems = [];
 let waitModalBusy = false;
 let satisfactionOpenItemId = null;
 
@@ -1974,11 +1968,15 @@ function createWaitModal() {
       return;
     }
 
+    const detail = event.target.closest('[data-discussion-id]');
+    if (detail) { discussionId = detail.dataset.discussionId; renderWaitModal(); return; }
+    if (event.target.closest('[data-discussion-back]')) { discussionId = null; renderWaitModal(); return; }
     const tabButton = event.target.closest(
       "[data-wait-tab]"
     );
 
     if (tabButton) {
+      discussionId = null;
       waitModalTab = tabButton.dataset.waitTab;
       renderWaitModal();
       return;
@@ -2017,6 +2015,7 @@ function createWaitModal() {
 function openWaitModal(tab = "waiting") {
   const modal = createWaitModal();
 
+  discussionId = null;
   const allowedTabs = ["waiting", "bought"];
   waitModalTab = allowedTabs.includes(tab) ? tab : "waiting";
 
@@ -2027,6 +2026,7 @@ function openWaitModal(tab = "waiting") {
   document.body.classList.add("locked");
 
   renderWaitModal();
+  void bowRefreshShared();
 }
 
 /* ==========================================
@@ -2140,6 +2140,7 @@ function renderWaitActions(item) {
 ========================================== */
 
 function renderWaitProduct(item, index) {
+  if (getItemStatus(item) !== "bought") return `<button type="button" class="bow-disc-card" data-discussion-id="${escapeHTML(item.id)}"><div class="wait-product-photo">${renderWaitPhoto(item)}</div><strong>${escapeHTML(formatPrice(item))}</strong><small>${escapeHTML(waitText("waiting"))}</small></button>`;
   const colors = [
     "#f8dce6",
     "#dcecf5",
@@ -2222,7 +2223,7 @@ function renderWaitModal() {
           </span>
 
           <strong>
-            ${status === "waiting" ? counts.waiting + counts.thinking : counts.bought}
+            ${status === "waiting" ? counts.waiting + counts.thinking + bowSharedItems.length : counts.bought}
           </strong>
         </button>
       `;
@@ -2240,9 +2241,18 @@ function renderWaitModal() {
   );
 
   const visibleItems = waitModalTab === "waiting"
-    ? finds.filter(item => ["waiting", "thinking"].includes(getItemStatus(item)))
+    ? [...finds, ...bowSharedItems].filter(item => ["waiting", "thinking"].includes(getItemStatus(item)))
     : getItemsByStatus("bought");
 
+  const selected = waitModalTab === "waiting" && visibleItems.find(item => String(item.id) === discussionId);
+  grid.classList.toggle('bow-disc-detail-grid', Boolean(selected));
+  if (selected) {
+    const w = {ko:['목록으로','친구와 나눈 이야기','메시지 기능은 다음 단계에서 연결해요.','메시지 입력…','음성 녹음','보내기','조금 더 고민할래요','같은 카테고리의 구매한 소품'],zh:['返回列表','和朋友的留言','下一阶段连接真实消息功能。','输入消息…','录音','发送','继续考虑','同类已购物品'],en:['Back to list','Conversation','Messaging will be connected in the next step.','Write a message…','Record voice','Send','Keep thinking','Purchased in this category']}[currentLang];
+    const count = finds.filter(x => getItemStatus(x)==='bought' && x.category===selected.category).length;
+    grid.innerHTML = `<section class="bow-disc-detail"><button type="button" class="bow-disc-back" data-discussion-back>${w[0]}</button><div class="bow-disc-summary"><div class="wait-product-photo">${renderWaitPhoto(selected)}</div><div><strong>${escapeHTML(formatPrice(selected))}</strong><p>${escapeHTML(t(CATEGORY_KEYS[selected.category] || 'catOther'))}</p><p>${escapeHTML(selected.name)}</p></div></div><p class="bow-disc-similar">${w[7]}: ${count}</p><h3>${w[1]}</h3><div class="bow-disc-empty">${w[2]}</div><div class="bow-disc-compose"><input disabled placeholder="${w[3]}"><button disabled type="button" aria-label="${w[4]}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></svg></button><button disabled type="button">${w[5]}</button></div><div class="bow-disc-actions">${selected.user_id === currentUser?.id ? renderWaitActions(selected) : ""}</div><button type="button" class="bow-disc-back" data-discussion-back>${w[6]}</button></section>`;
+    return;
+  }
+  discussionId = null;
   if (!visibleItems.length) {
     grid.innerHTML = `
       <p class="wait-modal-empty">
@@ -3671,7 +3681,7 @@ function initializeHomepageButtons() {
     });
   });
 
-  // 第二张卡片：잠깐 기다리기
+  // 第二张卡片：함께 고민하기
   // 统一打开中央等待弹窗，不再打开侧边栏。
   [
     "openWishlist",
@@ -3965,7 +3975,7 @@ async function startApplication() {
   currentLang = getSavedLanguage();
 
   // 2. 先读取本地备份
-  finds = loadLocalBackup();
+  finds = [];
 
   // 3. 安装中央弹窗兼容样式
   installWaitModalStyles();
@@ -4540,3 +4550,46 @@ async function recordNotBuyingAndRemove(itemId) {
   if(result.error) throw new Error(result.error.message+' (Run monthly_choices_phase1.sql in Supabase first.)');
   await loadCloudFinds();
 }
+
+async function bowRefreshShared() {
+  if (!cloudReady || !currentUser) return;
+  try {
+    const uid = currentUser.id;
+    const {data: links,error} = await supabaseClient.from('bow_friendships').select('user_id,friend_id').eq('status','accepted').or(`user_id.eq.${uid},friend_id.eq.${uid}`);
+    if(error) throw error;
+    const ids = [...new Set((links || []).map(x=>x.user_id===uid?x.friend_id:x.user_id))];
+    bowSharedItems = [];
+    if(ids.length){
+      const result = await supabaseClient.from(TABLE).select('*').in('user_id',ids).in('status',['waiting','thinking']).order('created_at',{ascending:false});
+      if(result.error) throw result.error;
+      bowSharedItems = (result.data || []).map(normalizeItem);
+      await Promise.all(bowSharedItems.map(async item=>{
+        if(!item.photo_path) return;
+        const {data} = await supabaseClient.storage.from(BUCKET).createSignedUrl(item.photo_path,3600);
+        if(data?.signedUrl) item.photo_url=data.signedUrl;
+      }));
+    }
+    if ($('waitModal')?.classList.contains('open')) renderWaitModal();
+  } catch(error) { console.error(error); notify('공유 목록을 불러오지 못했어요.'); }
+}
+$('bowShowPassword').addEventListener('change', e=>{$('bowPassword').type=e.target.checked?'text':'password';});
+$('bowLoginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const button=$('bowLoginButton'); button.disabled=true; $('bowLoginError').textContent='';
+  try {
+    await loadSupabaseLibrary();
+    await initializeSupabase();
+    if(!supabaseClient) throw new Error('클라우드 연결 실패');
+    const {error}=await supabaseClient.auth.signInWithPassword({email:$('bowEmail').value.trim(),password:$('bowPassword').value});
+    if(error) throw error;
+    $('bowPassword').value='';
+    cloudReady=false; currentUser=null;
+    if(!await initializeSupabase()) throw new Error('데이터 연결 실패');
+  } catch(error){$('bowLoginError').textContent=error.message;} finally {button.disabled=false;}
+});
+$('bowLogout').addEventListener('click',async ()=>{
+  if(!supabaseClient) return;
+  const {error}=await supabaseClient.auth.signOut({scope:'local'});
+  if(error){notify(error.message);return;}
+  location.reload();
+});

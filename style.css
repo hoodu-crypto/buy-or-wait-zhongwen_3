@@ -1923,3 +1923,25 @@ html body .hero-art .art-card small {
     letter-spacing: 0.02em !important;
   }
 }
+
+/* Step 01: compact discussion UI */
+#waitModal.wait-modal .wait-modal-grid:not(.bow-disc-detail-grid){grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#waitModal .bow-disc-card{min-width:0;background:#fffaf4;border:1px solid #e7d9ce;border-radius:16px;padding:10px;text-align:left;color:inherit;display:grid;gap:8px}
+#waitModal .bow-disc-card strong{font-size:18px}#waitModal .bow-disc-card small{color:#806f62;font-size:12px}
+#waitModal.wait-modal .bow-disc-detail-grid{grid-template-columns:1fr}#waitModal .bow-disc-detail{display:grid;gap:14px;min-width:0}
+#waitModal .bow-disc-summary{display:grid;grid-template-columns:100px minmax(0,1fr);gap:15px;align-items:center;overflow-wrap:anywhere}
+#waitModal .bow-disc-summary p{margin:5px 0}#waitModal .bow-disc-similar{background:#fff0d5;padding:12px;border-radius:12px;margin:0}
+#waitModal .bow-disc-empty{background:#faf0f3;border-radius:14px;padding:24px 12px;text-align:center;color:#806f62;min-height:100px}
+#waitModal .bow-disc-compose{display:flex;gap:8px;align-items:center}#waitModal .bow-disc-compose input{min-width:0;flex:1;border:1px solid #e3d5ca;border-radius:24px;padding:12px;background:white}#waitModal .bow-disc-compose button{border:0;border-radius:24px;background:#ecd3df;padding:10px;color:#705665;display:grid;place-items:center}
+#waitModal .bow-disc-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}#waitModal .bow-disc-back{background:transparent;border:1px solid #dac9ba;border-radius:24px;padding:10px;color:inherit}#waitModal .bow-disc-detail h3{margin:0}
+
+/* Account login */
+.bow-login[hidden]{display:none!important}
+body.bow-auth-pending{overflow:hidden}
+body.bow-auth-pending > :not(#bowLogin):not(script):not(style){visibility:hidden!important;pointer-events:none!important}
+.bow-login{position:fixed;inset:0;z-index:99999;background:#fff3d5;display:grid;place-items:center;overflow:auto;padding:24px}
+.bow-login-card{width:min(100%,420px);background:#fffefa;border:1px solid #dbc7b0;border-radius:24px;padding:32px;box-shadow:5px 6px 0 #755a4720;color:#4a3227}
+.bow-login-card h1{font:700 clamp(30px,8vw,44px) Fredoka,sans-serif;text-align:center;margin:0;letter-spacing:-.04em}
+.bow-login-card h1 span{color:#d7839d}.bow-login-card>p{text-align:center;font-size:13px}.bow-login-card h2{text-align:center;font-size:23px;margin:30px 0 22px}
+.bow-login-card label{display:grid;gap:8px;margin:14px 0;font-size:14px}.bow-login-card input:not([type=checkbox]){width:100%;border:1px solid #cdb8a3;border-radius:10px;background:#fffaf0;padding:13px;color:inherit;font-size:16px}
+.bow-login-card .bow-show-password{display:flex;align-items:center;font-size:12px}.bow-login-card button{background:#f8c8d7}.bow-login-card button:disabled{opacity:.6}.bow-login-card #bowLoginError{color:#a33b43;overflow-wrap:anywhere}.bow-logout{border:1px solid #d9c8b5;background:#fffaf0;border-radius:30px;padding:8px 12px;color:inherit;white-space:nowrap;font-size:12px}

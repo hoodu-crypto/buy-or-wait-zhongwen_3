@@ -38,7 +38,7 @@
     rel="stylesheet"
   />
 
-  <link rel="stylesheet" href="style.css?v=20261123-noicons3" />
+  <link rel="stylesheet" href="style.css?v=20261124-login2" />
 
   <!-- Load Supabase library first -->
   <script
@@ -47,7 +47,7 @@
   ></script>
 
   <!-- Main website functionality -->
-  <script src="script.js?v=20261123-noicons3" defer></script>
+  <script src="script.js?v=20261124-login2" defer></script>
   <script src="collection.js?v=20261120-purchased2" defer></script>
 
 <style>
@@ -70,7 +70,17 @@
 
 </head>
 
-<body>
+<body class="bow-auth-pending">
+<section id="bowLogin" class="bow-login" aria-label="로그인">
+<form id="bowLoginForm" class="bow-login-card">
+<h1>BUY <span>OR</span> WAIT?</h1><p>지금은 좋아해도, 결정은 나중에.</p>
+<h2>우리의 작은 공간</h2>
+<label>이메일<input id="bowEmail" type="email" autocomplete="username" required></label>
+<label>비밀번호<input id="bowPassword" type="password" autocomplete="current-password" required></label>
+<label class="bow-show-password"><input id="bowShowPassword" type="checkbox"> 비밀번호 보기</label>
+<button class="btn btn-yellow full" id="bowLoginButton" type="submit">로그인</button>
+<p id="bowLoginError" role="status"></p>
+</form></section>
 
   <!-- HEADER -->
   <header class="site-header">
@@ -91,6 +101,7 @@
 
     <div class="header-actions">
 
+      <button type="button" id="bowLogout" class="bow-logout">로그아웃</button>
       <!-- LANGUAGE SWITCH -->
       <div
         class="language-switch"
