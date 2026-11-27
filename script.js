@@ -36,9 +36,9 @@ const I18N = {
     navFinds: "나의 발견",
     navRoom: "나의 방",
     lead: "너무 귀여워. 갖고 싶어.<br>그런데 <i>정말</i> 필요할까?",
-    want: "♡ 갖고 싶어!",
+    want: " 갖고 싶어!",
     wishlist: "위시리스트 보기",
-    ticker: "♡ 발견하기 ♡ 저장하기 ♡ 다시 생각하기 ♡ 가진 것 사랑하기",
+    ticker: " 발견하기  저장하기  다시 생각하기  가진 것 사랑하기",
     stepsKicker: "작은 사용 안내",
     stepsTitle: "<span class=\"steps-title-small\">지금은 좋아해도,</span><span class=\"steps-title-large\">결정은 나중에.</span>",
     stepsDesc: "“너무 귀여워!”에서 “샀어!”까지, 세 가지 작은 단계",
@@ -51,7 +51,7 @@ const I18N = {
     stepButton1: "물건 추가하기",
     stepButton2: "함께 고민하기",
     stepButton3: "나의 발견 보기",
-    findsKicker: "♡ 나만의 작은 컬렉션",
+    findsKicker: " 나만의 작은 컬렉션",
     findsTitle: '나의 작은 발견<span class="sparkle">✳</span>',
     findsDesc: "마음에 쏙 들었던 귀여운 것들을 모아 보세요.",
     add: "＋ 물건 추가하기",
@@ -65,9 +65,9 @@ const I18N = {
     roomSmall: "3D 방은 다음 단계에서 연결할 예정이에요.",
     footer1: "귀여운 것을 좋아하는 친구를 위해 만들었어요.",
     footer2: "작은 물건, 신중한 선택. © 2026",
-    drawerKicker: "♡ 잠깐의 기다림",
+    drawerKicker: " 잠깐의 기다림",
     drawerTitle: "나의 위시리스트",
-    drawerMessage: "오늘은 사진만 저장해도 충분해요. 지금 사지 않아도 괜찮아요 ♡",
+    drawerMessage: "오늘은 사진만 저장해도 충분해요. 지금 사지 않아도 괜찮아요 ",
     waitingStat: "고민 중",
     boughtStat: "이미 샀어요",
     drawerUpload: "＋ 다른 물건 저장하기",
@@ -80,7 +80,7 @@ const I18N = {
     nameLabel: "어떤 점이 마음에 들었나요?",
     priceLabel: "가격",
     categoryLabel: "카테고리",
-    save: "♡ 위시리스트에 저장하기",
+    save: " 위시리스트에 저장하기",
     namePlaceholder: "",
     catPlushies: "인형",
     catKeychains: "키링",
@@ -88,7 +88,7 @@ const I18N = {
     catAccessories: "액세서리",
     catHome: "인테리어 소품",
     catOther: "기타 귀여운 물건",
-    statusWaiting: "♡ 고민 중",
+    statusWaiting: " 고민 중",
     statusBought: "✓ 이미 샀어요",
     markBought: "✓ 구매 완료",
     markWaiting: "↶ 다시 고민하기",
@@ -103,16 +103,16 @@ const I18N = {
     needName: "물건 이름을 입력해 주세요.",
     imageInvalid: "5MB 이하의 JPG, PNG 또는 WEBP 이미지를 선택해 주세요.",
     imageError: "사진을 불러올 수 없어요.",
-    saved: "♡ 위시리스트에 저장했어요!",
+    saved: " 위시리스트에 저장했어요!",
     removed: "물건을 삭제했어요.",
     markedBought: "구매 완료로 표시했어요.",
     markedWaiting: "다시 고민 중으로 변경했어요.",
-    connected: "♡ 클라우드 연결 완료!",
+    connected: " 클라우드 연결 완료!",
     connectionError: "클라우드 연결 실패",
     saveError: "저장 실패",
     updateError: "수정 실패",
     deleteError: "삭제 실패",
-    roomNotice: "♡ 3D 방은 다음 단계에서 연결할 예정이에요!",
+    roomNotice: " 3D 방은 다음 단계에서 연결할 예정이에요!",
     saving: "저장 중..."
   },
 
@@ -123,9 +123,9 @@ const I18N = {
     navFinds: "我的发现",
     navRoom: "我的房间",
     lead: "太可爱了，好想拥有。<br>但是<i>真的</i>需要吗？",
-    want: "♡ 好想拥有！",
+    want: " 好想拥有！",
     wishlist: "查看心愿清单",
-    ticker: "♡ 发现它 ♡ 收藏它 ♡ 再想一想 ♡ 珍惜已拥有的",
+    ticker: " 发现它  收藏它  再想一想  珍惜已拥有的",
     stepsKicker: "使用指南",
     stepsTitle: "<span class=\"steps-title-small\">现在喜欢，</span><span class=\"steps-title-large\">以后再决定。</span>",
     stepsDesc: "从发现心动，到等待考虑，再到已购收藏",
@@ -138,7 +138,7 @@ const I18N = {
     stepButton1: "添加物品",
     stepButton2: "一起考虑",
     stepButton3: "查看已购小物",
-    findsKicker: "♡ 我的小物记录",
+    findsKicker: " 我的小物记录",
     findsTitle: '我的心动小物<span class="sparkle">✳</span>',
     findsDesc: "把让你心动的小东西收藏在这里。",
     add: "＋ 添加物品",
@@ -152,9 +152,9 @@ const I18N = {
     roomSmall: "3D 房间将在下一步连接。",
     footer1: "为喜欢可爱小东西的朋友而制作。",
     footer2: "小小物品，认真选择。© 2026",
-    drawerKicker: "♡ 先收藏，再决定",
+    drawerKicker: " 先收藏，再决定",
     drawerTitle: "我的心愿清单",
-    drawerMessage: "今天只保存照片就好，不一定要立刻买下来 ♡",
+    drawerMessage: "今天只保存照片就好，不一定要立刻买下来 ",
     waitingStat: "考虑中",
     boughtStat: "已购买",
     drawerUpload: "＋ 再收藏一件",
@@ -167,7 +167,7 @@ const I18N = {
     nameLabel: "你喜欢它的哪一点？",
     priceLabel: "价格",
     categoryLabel: "物品分类",
-    save: "♡ 保存到心愿清单",
+    save: " 保存到心愿清单",
     namePlaceholder: "",
     catPlushies: "玩偶",
     catKeychains: "钥匙扣",
@@ -175,7 +175,7 @@ const I18N = {
     catAccessories: "配饰",
     catHome: "家居小物",
     catOther: "其他可爱物品",
-    statusWaiting: "♡ 考虑中",
+    statusWaiting: " 考虑中",
     statusBought: "✓ 已买过",
     markBought: "↶ 再想想",
     markWaiting: "↶ 再想想",
@@ -190,16 +190,16 @@ const I18N = {
     needName: "请先填写物品名称。",
     imageInvalid: "请选择不超过 5MB 的 JPG、PNG 或 WEBP 图片。",
     imageError: "照片读取失败。",
-    saved: "♡ 已保存到心愿清单！",
+    saved: " 已保存到心愿清单！",
     removed: "物品已删除。",
     markedBought: "已标记为“已购买”。",
     markedWaiting: "已改为考虑中。",
-    connected: "♡ 云端连接成功！",
+    connected: " 云端连接成功！",
     connectionError: "云端连接失败",
     saveError: "保存失败",
     updateError: "修改失败",
     deleteError: "删除失败",
-    roomNotice: "♡ 3D 房间将在下一步连接！",
+    roomNotice: " 3D 房间将在下一步连接！",
     saving: "正在保存..."
   },
 
@@ -210,9 +210,9 @@ const I18N = {
     navFinds: "MY FINDS",
     navRoom: "MY ROOM",
     lead: "It's cute. You love it.<br>But do you <i>really</i> need it?",
-    want: "♡ I WANT IT!",
+    want: " I WANT IT!",
     wishlist: "VIEW MY WISHLIST",
-    ticker: "♡ SPOT IT ♡ SAVE IT ♡ THINK TWICE ♡ LOVE WHAT YOU HAVE",
+    ticker: " SPOT IT  SAVE IT  THINK TWICE  LOVE WHAT YOU HAVE",
     stepsKicker: "A LITTLE GUIDE",
     stepsTitle: "<span class=\"steps-title-small\">Love it now.</span><span class=\"steps-title-large\">Decide later.</span>",
     stepsDesc: "Three small steps between “so cute!” and “I bought it!”",
@@ -225,7 +225,7 @@ const I18N = {
     stepButton1: "ADD A FIND",
     stepButton2: "THINK TOGETHER",
     stepButton3: "MY LITTLE FINDS",
-    findsKicker: "♡ YOUR VERY OWN COLLECTION",
+    findsKicker: " YOUR VERY OWN COLLECTION",
     findsTitle: 'My little finds<span class="sparkle">✳</span>',
     findsDesc: 'All the things that made you stop and say “aww!”',
     add: "＋ ADD A FIND",
@@ -239,9 +239,9 @@ const I18N = {
     roomSmall: "3D room connection coming in the next step.",
     footer1: "Made for a friend who loves all things cute.",
     footer2: "Little things. Thoughtful choices. © 2026",
-    drawerKicker: "♡ THE LITTLE PAUSE",
+    drawerKicker: " THE LITTLE PAUSE",
     drawerTitle: "My Wishlist",
-    drawerMessage: "A photo is enough for today. You don't have to buy it now ♡",
+    drawerMessage: "A photo is enough for today. You don't have to buy it now ",
     waitingStat: "Still thinking",
     boughtStat: "Already mine",
     drawerUpload: "＋ SAVE ANOTHER FIND",
@@ -254,7 +254,7 @@ const I18N = {
     nameLabel: "WHAT DO YOU LIKE ABOUT IT?",
     priceLabel: "PRICE",
     categoryLabel: "CATEGORY",
-    save: "♡ SAVE TO WISHLIST",
+    save: " SAVE TO WISHLIST",
     namePlaceholder: "",
     catPlushies: "Plushies",
     catKeychains: "Keychains",
@@ -262,7 +262,7 @@ const I18N = {
     catAccessories: "Accessories",
     catHome: "Home decor",
     catOther: "Other cute things",
-    statusWaiting: "♡ Still thinking",
+    statusWaiting: " Still thinking",
     statusBought: "✓ Already mine",
     markBought: "✓ BOUGHT",
     markWaiting: "↶ WAITING",
@@ -277,16 +277,16 @@ const I18N = {
     needName: "Give your find a name first.",
     imageInvalid: "Choose a JPG, PNG or WEBP image under 5 MB.",
     imageError: "Could not read this photo.",
-    saved: "♡ Saved to your cloud wishlist!",
+    saved: " Saved to your cloud wishlist!",
     removed: "Find removed.",
     markedBought: "Marked as bought.",
     markedWaiting: "Moved back to waiting.",
-    connected: "♡ Your collection is connected!",
+    connected: " Your collection is connected!",
     connectionError: "Cloud connection failed",
     saveError: "Could not save",
     updateError: "Update failed",
     deleteError: "Delete failed",
-    roomNotice: "♡ Your 3D room will be connected in the next step!",
+    roomNotice: " Your 3D room will be connected in the next step!",
     saving: "Saving..."
   }
 };
@@ -478,6 +478,7 @@ function normalizeItem(row) {
 
     purchased_at: row.purchased_at || null,
     updated_at: row.updated_at || null,
+    no_buy_started_at: row.no_buy_started_at || null,
     created_at:
       row.created_at ||
       new Date().toISOString()
@@ -640,7 +641,7 @@ function createPhotoHTML(item, className = "") {
   if (!photoURL) {
     return `
       <div class="${escapeHTML(className)} empty-photo">
-        <span aria-hidden="true">♡</span>
+        
       </div>
     `;
   }
@@ -1213,6 +1214,7 @@ async function updateCloudItemStatus(itemId, status) {
 
   const previousItem = finds.find(entry => String(entry.id) === String(itemId));
   const statusUpdate = { status };
+  if (status === "bought") statusUpdate.no_buy_started_at = null;
   if (status === "bought" && previousItem?.status !== "bought") {
     statusUpdate.purchased_at = new Date().toISOString();
   } else if (status !== "bought") {
@@ -1429,7 +1431,7 @@ function renderProductPhoto(item) {
   if (!photoURL) {
     return `
       <div class="find-photo-placeholder">
-        <span aria-hidden="true">♡</span>
+        
       </div>
     `;
   }
@@ -1544,10 +1546,6 @@ function renderEmptyFinds() {
 
   return `
     <div class="finds-empty">
-      <div class="finds-empty-icon">
-        ♡
-      </div>
-
       <h3>${escapeHTML(emptyTitle)}</h3>
 
       <p>
@@ -1829,6 +1827,7 @@ const WAIT_MODAL_I18N = {
     waitAgain: "다시 기다리기",
     boughtAction: "이미 샀어요",
     satisfactionAction: "구매 만족도 기록하기",
+    satisfactionSave: "저장",
     satisfactionSaved: "기록한 만족도",
     satisfactionLove: "짱 좋아!",
     satisfactionOkay: "그냥 그래",
@@ -1873,6 +1872,7 @@ const WAIT_MODAL_I18N = {
     waitAgain: "重新等待",
     boughtAction: "已经买了",
     satisfactionAction: "记录购买满意度",
+    satisfactionSave: "保存",
     satisfactionSaved: "已记录",
     satisfactionLove: "太喜欢了",
     satisfactionOkay: "一般般",
@@ -1917,6 +1917,7 @@ const WAIT_MODAL_I18N = {
     waitAgain: "Wait again",
     boughtAction: "Already bought",
     satisfactionAction: "Rate my purchase",
+    satisfactionSave: "Save",
     satisfactionSaved: "Saved",
     satisfactionLove: "Love it!",
     satisfactionOkay: "It’s okay.",
@@ -1952,6 +1953,10 @@ let waitModalTab = "waiting";
 let discussionId = null;
 let bowSharedItems = [];
 let waitModalBusy = false;
+const satisfactionValues = ["regret", "okay", "love"];
+function satisfactionLabel(value) {
+  return waitText("satisfaction" + value[0].toUpperCase() + value.slice(1));
+}
 let satisfactionOpenItemId = null;
 let bowDiscussionMessages = [];
 let bowDiscussionMessageItemId = "";
@@ -2182,9 +2187,11 @@ async function sendDiscussionMessage() {
     bowDiscussionSendBusy = false;
     const inputAfterSend = $("bowDiscussionInput");
     const button = $("bowDiscussionSend");
+    const voiceButton = document.querySelector("[data-discussion-voice]");
     const canCompose = Boolean(currentUser) && Boolean(discussionId) && !bowDiscussionSendBusy;
     if (inputAfterSend) inputAfterSend.disabled = !canCompose;
     if (button) button.disabled = !canCompose;
+    if (voiceButton) voiceButton.disabled = !canCompose || bowDiscussionVoiceBusy;
   }
 }
 
@@ -2502,7 +2509,8 @@ function createWaitModal() {
         return;
       }
       if (nextStatus === "set-satisfaction") {
-        await updateWaitSatisfaction(itemId, actionButton.dataset.waitValue);
+        const slider = actionButton.parentElement.querySelector("[data-satisfaction-slider]");
+        await updateWaitSatisfaction(itemId, satisfactionValues[slider.valueAsNumber]);
         return;
       }
       await updateWaitItem(itemId, nextStatus);
@@ -2517,6 +2525,10 @@ function createWaitModal() {
   });
 
   modal.addEventListener("input", (event) => {
+    if (event.target.matches("[data-satisfaction-slider]")) {
+      event.target.setAttribute("aria-valuetext", satisfactionLabel(satisfactionValues[event.target.valueAsNumber]));
+      return;
+    }
     if (event.target.matches("[data-discussion-input]")) {
       bowDiscussionDraft = event.target.value;
     }
@@ -2579,7 +2591,7 @@ function renderWaitPhoto(item) {
   if (!photoURL) {
     return `
       <div class="wait-photo-empty">
-        <span aria-hidden="true">♡</span>
+        
       </div>
     `;
   }
@@ -2631,15 +2643,18 @@ function renderWaitActions(item) {
   const currentRating = item.satisfaction
     ? `<small>${escapeHTML(waitText("satisfactionSaved"))}: ${escapeHTML(waitText(`satisfaction${item.satisfaction[0].toUpperCase()}${item.satisfaction.slice(1)}`))}</small>`
     : "";
+  const rating = item.satisfaction || "okay";
   const ratingOptions = satisfactionOpenItemId === String(item.id)
-    ? `<div class="wait-satisfaction-options" role="group" aria-label="${escapeHTML(waitText("satisfactionAction"))}">
-        ${["love", "okay", "regret"].map((value) => `
-          <button type="button" class="wait-satisfaction-choice ${item.satisfaction === value ? "selected" : ""}"
-            data-wait-action="set-satisfaction" data-wait-id="${id}" data-wait-value="${value}"
-            aria-pressed="${item.satisfaction === value}">
-            ${escapeHTML(waitText(`satisfaction${value[0].toUpperCase()}${value.slice(1)}`))}
-          </button>
-        `).join("")}
+    ? `<div class="wait-satisfaction-options">
+        <input type="range" data-satisfaction-slider min="0" max="2" step="1"
+          value="${satisfactionValues.indexOf(rating)}" aria-label="${escapeHTML(waitText("satisfactionAction"))}"
+          aria-valuetext="${escapeHTML(satisfactionLabel(rating))}">
+        <div class="wait-satisfaction-labels" aria-hidden="true">
+          ${satisfactionValues.map(value => `<span>${escapeHTML(satisfactionLabel(value))}</span>`).join("")}
+        </div>
+        <button type="button" class="wait-action" data-wait-action="set-satisfaction" data-wait-id="${id}">
+          ${escapeHTML(waitText("satisfactionSave"))}
+        </button>
       </div>`
     : "";
 
@@ -2848,7 +2863,7 @@ async function updateWaitItem(itemId, nextStatus) {
 
   try {
     if (nextStatus === "delete") {
-      await recordNotBuyingAndRemove(itemId);
+      await recordNoBuyChoice(itemId);
     } else {
       await updateCloudItemStatus(itemId, nextStatus);
     }
@@ -3726,7 +3741,6 @@ function renderDrawerItems() {
   if (!finds.length) {
     container.innerHTML = `
       <div class="drawer-empty">
-        <div class="empty-icon">♡</div>
         <p>${escapeHTML(t("drawerEmpty"))}</p>
       </div>
     `;
@@ -4090,23 +4104,22 @@ function installWaitModalStyles() {
       flex: 1 0 100%;
     }
 
-    #waitModal .wait-satisfaction-choice {
-      min-height: 39px;
-      padding: 7px 10px;
-      border: 1.5px solid #51474a;
-      border-radius: 10px;
-      background: #fffdf8;
-      color: #40363a;
-      font: inherit;
-      font-size: 13px;
-      font-weight: 700;
+    #waitModal [data-satisfaction-slider] {
+      width: 100%;
+      height: 44px;
+      margin: 0;
+      accent-color: #996476;
       cursor: pointer;
     }
 
-    #waitModal .wait-satisfaction-choice.selected {
-      background: #fce4a3;
-      box-shadow: inset 0 0 0 1px #51474a;
+    #waitModal .wait-satisfaction-labels {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      text-align: center;
+      font-size: 13px;
     }
+    #waitModal .wait-satisfaction-labels span:first-child { text-align: left; }
+    #waitModal .wait-satisfaction-labels span:last-child { text-align: right; }
 
     #waitModal .wait-modal-empty {
       grid-column: 1 / -1;
@@ -4574,7 +4587,7 @@ const SIMILAR_TEXT = {
     count: n => `이미 담아둔 물건 중 비슷한 물건 ${n}개를 찾았어요.`,
     compare: "비슷한 물건 비교하기",
     newItem: "새로 발견한 물건",
-    continue: "그래도 마음에 담기 ♡",
+    continue: "그래도 마음에 담기 ",
     back: "다시 생각하기",
     waiting: "기다리는 중",
     thinking: "다시 생각 중",
@@ -4585,7 +4598,7 @@ const SIMILAR_TEXT = {
     count: n => `发现 ${n} 件相似的小物，一起比较看看吧。`,
     compare: "看看相似的小物",
     newItem: "刚发现的物品",
-    continue: "还是想收藏 ♡",
+    continue: "还是想收藏 ",
     back: "暂时不收藏",
     waiting: "等待中",
     thinking: "重新考虑中",
@@ -4596,7 +4609,7 @@ const SIMILAR_TEXT = {
     count: n => `Found ${n} similar saved item(s).`,
     compare: "Compare similar finds",
     newItem: "New find",
-    continue: "Save it anyway ♡",
+    continue: "Save it anyway ",
     back: "Think again",
     waiting: "Waiting",
     thinking: "Thinking again",
@@ -4664,7 +4677,7 @@ function renderSimilarComparison(matches) {
                    src="${escapeHTML(photo)}"
                    alt="${escapeHTML(item.name)}"
                  >`
-              : `<span>♡</span>`
+              : ``
           }
         </div>
 
@@ -4685,7 +4698,7 @@ function renderSimilarComparison(matches) {
 
   area.innerHTML = `
     <div class="similar-notice">
-      <div class="similar-notice-icon">♡</div>
+      
 
       <h3>${escapeHTML(words.title)}</h3>
 
@@ -4888,19 +4901,19 @@ if (document.readyState === "loading") {
       near: {title:"이번 달 예산이 얼마 남지 않았어요!", description:"이번 달 구매 금액이 예산의 90% 이상이에요. 다음 구매는 조금 더 생각해 볼까요?"},
       reached: {title:"이번 달 예산을 모두 사용했어요!", description:"이번 달 구매 금액이 예산의 100%에 도달했어요. 다음 구매는 조금 더 생각해 볼까요?"},
       exceeded: {title:"이번 달 예산을 초과했어요!", description:"이번 달 구매 금액이 예산의 100%를 넘었어요. 다음 구매는 조금 더 생각해 볼까요?"},
-      spent:"이번 달 구매 금액", left:"남은 예산", over:"예산 초과", limit:"월 소비 한도", confirm:"확인했어요", estimate:"현재 환율 기준 추정 금액"
+      spent:"이번 달 구매 금액", left:"남은 예산", over:"예산 초과", limit:"월 소비 한도", confirm:"확인했어요"
     },
     zh: {
       near: {title:"这个月的预算快用完了！", description:"本月已购金额已达到预算的90%以上，下次购买前再考虑一下吧。"},
       reached: {title:"本月预算已经用完了！", description:"本月已购金额已达到预算的100%，下次购买前再考虑一下吧。"},
       exceeded: {title:"本月消费已经超出预算！", description:"本月已购金额已超过预算的100%，下次购买前再考虑一下吧。"},
-      spent:"本月已购金额", left:"剩余预算", over:"超出预算", limit:"每月固定限额", confirm:"知道了", estimate:"按当前汇率估算"
+      spent:"本月已购金额", left:"剩余预算", over:"超出预算", limit:"每月固定限额", confirm:"知道了"
     },
     en: {
       near: {title:"You're getting close to your monthly budget!", description:"Your purchases have reached at least 90% of your monthly budget. Take a moment before your next purchase."},
       reached: {title:"You've reached your monthly budget!", description:"Your purchases have reached 100% of your monthly budget. Take a moment before your next purchase."},
       exceeded: {title:"You've exceeded your monthly budget!", description:"Your purchases have passed 100% of your monthly budget. Take a moment before your next purchase."},
-      spent:"Spent this month", left:"Budget remaining", over:"Over budget", limit:"Fixed monthly limit", confirm:"Got it", estimate:"Estimated at current exchange rates"
+      spent:"Spent this month", left:"Budget remaining", over:"Over budget", limit:"Fixed monthly limit", confirm:"Got it"
     }
   };
   const lang = () => ["ko","zh","en"].includes(currentLang) ? currentLang : "ko";
@@ -4926,21 +4939,29 @@ if (document.readyState === "loading") {
     const rate=bowExchangeRates?.[from];
     return rate ? amount/rate : null;
   };
-  function monthlySpent() {
-    const currentMonth=monthKey(new Date());
+  function monthlySpent(targetMonth = monthKey(new Date())) {
     let total=0;
     for (const item of finds) {
       if (item.status!=="bought" && item.bought!==true) continue;
       // For legacy items lacking purchased_at, use updated_at if available,
       // otherwise created_at. The migration backfills purchased_at for old rows.
       const purchased=item.purchased_at || item.updated_at || item.created_at;
-      if (monthKey(purchased)!==currentMonth) continue;
+      if (monthKey(purchased)!==targetMonth) continue;
       const value=amountInKRW(item);
       if (value===null) return null; // Never show a misleading warning from partial totals.
       total+=value;
     }
     return total;
   }
+  window.bowMonthlyBudgetSnapshot = (targetMonth) => {
+    const spent = monthlySpent(targetMonth || monthKey(new Date()));
+    return spent === null ? null : {
+      spent: format(spent),
+      delta: format(Math.abs(MONTHLY_LIMIT_KRW - spent)),
+      over: spent > MONTHLY_LIMIT_KRW,
+      limit: format(MONTHLY_LIMIT_KRW)
+    };
+  };
   function ensureModal() {
     if (document.getElementById("bowBudgetOverlay")) return;
     const style=document.createElement("style");
@@ -4949,7 +4970,6 @@ if (document.readyState === "loading") {
       #bowBudgetOverlay{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(55,43,39,.45);box-sizing:border-box}
       #bowBudgetDialog{width:min(100%,390px);max-height:calc(100dvh - 40px);overflow:auto;background:#fff7e9;color:#684a3f;border:1px solid #ecd7c4;border-radius:25px;box-shadow:0 20px 65px rgba(50,34,30,.2);padding:27px 24px 24px;box-sizing:border-box;text-align:center;font-family:inherit}
       #bowBudgetDialog *{box-sizing:border-box}
-      .bow-budget-icon{width:62px;height:62px;margin:0 auto 13px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f8dfe8;color:#b76582;font-size:28px}
       #bowBudgetTitle{font-size:20px;font-weight:800;line-height:1.45;margin:0 0 10px}
       #bowBudgetDescription{font-size:14px;line-height:1.7;margin:0 0 20px;color:#8a7163}
       .bow-budget-progress{height:11px;border-radius:99px;background:#e8d7c8;overflow:hidden;margin:0 0 15px}
@@ -4959,14 +4979,12 @@ if (document.readyState === "loading") {
       .bow-budget-row strong{font-size:14px;text-align:right;white-space:nowrap}
       #bowBudgetConfirm{display:block;width:100%;border:0;border-radius:12px;background:#eabacb;color:#613e4b;font:inherit;font-size:15px;font-weight:750;cursor:pointer;padding:13px}
       #bowBudgetConfirm:hover{background:#e4a9be}
-      #bowBudgetRateNote{display:block;font-size:11px;color:#a18c80;margin-top:11px}
     `;
     document.head.appendChild(style);
     const overlay=document.createElement("div");
     overlay.id="bowBudgetOverlay";
     overlay.hidden=true;
     overlay.innerHTML=`<section id="bowBudgetDialog" role="dialog" aria-modal="true" aria-labelledby="bowBudgetTitle" aria-describedby="bowBudgetDescription">
-      <div class="bow-budget-icon" aria-hidden="true">♡</div>
       <h2 id="bowBudgetTitle"></h2><p id="bowBudgetDescription"></p>
       <div class="bow-budget-progress"><div id="bowBudgetFill"></div></div>
       <div class="bow-budget-rows">
@@ -4974,7 +4992,7 @@ if (document.readyState === "loading") {
         <div class="bow-budget-row"><span id="bowBudgetRemainingLabel"></span><strong id="bowBudgetRemaining"></strong></div>
         <div class="bow-budget-row"><span id="bowBudgetLimitLabel"></span><strong id="bowBudgetLimit"></strong></div>
       </div>
-      <button type="button" id="bowBudgetConfirm"></button><small id="bowBudgetRateNote"></small>
+      <button type="button" id="bowBudgetConfirm"></button>
     </section>`;
     document.body.appendChild(overlay);
     document.getElementById("bowBudgetConfirm").addEventListener("click",()=>{overlay.hidden=true;isVisible=false;});
@@ -4995,7 +5013,6 @@ if (document.readyState === "loading") {
     document.getElementById("bowBudgetRemaining").textContent=format(Math.abs(remaining));
     document.getElementById("bowBudgetLimit").textContent=format(MONTHLY_LIMIT_KRW);
     document.getElementById("bowBudgetConfirm").textContent=word.confirm;
-    document.getElementById("bowBudgetRateNote").textContent=bowExchangeRates ? word.estimate : (lang()==="zh" ? "汇率暂不可用，金额暂以韩元显示" : lang()==="en" ? "Exchange rate unavailable; amounts shown in KRW" : "환율을 불러올 수 없어 원화로 표시해요");
     document.getElementById("bowBudgetFill").style.width=Math.min(100,lastSpent/MONTHLY_LIMIT_KRW*100)+"%";
   }
   async function checkBudgetOnEntry() {
@@ -5065,13 +5082,13 @@ if (document.readyState === "loading") {
 })();
 
 
-/* Record a decision and remove its wishlist item in one server transaction.
-   Without the migration, the action fails safely and does not delete the item. */
-async function recordNotBuyingAndRemove(itemId) {
+/* Record the decision and refresh its calendar entry. */
+async function recordNoBuyChoice(itemId) {
   if (!await ensureCloudConnection()) throw new Error('Cloud connection unavailable.');
-  const result=await supabaseClient.rpc('bow_record_no_buy',{p_item_id:String(itemId)});
-  if(result.error) throw new Error(result.error.message+' (Run monthly_choices_phase1.sql in Supabase first.)');
+  const result=await supabaseClient.rpc('bow_record_no_buy_choice',{p_item_id:String(itemId)});
+  if(result.error) throw new Error(result.error.message);
   await loadCloudFinds();
+  if(typeof window.bowRefreshChoices==='function') await window.bowRefreshChoices(true);
 }
 
 async function bowRefreshShared() {
@@ -5116,3 +5133,229 @@ $('bowLogout').addEventListener('click',async ()=>{
   if(error){notify(error.message);return;}
   location.reload();
 });
+
+/* MONTHLY NO-BUY CALENDAR — 15 distinct item decisions, each verified server-side. */
+(function () {
+  const GOAL = 15;
+  const dictionary = {
+    ko: {
+      title: "안 사길 잘했어!", count: "이번 달 안 사기로 한 물건", remaining: "다음 선물까지", spent: "이번 달 구매 금액", delta: "예산 남음", over: "예산 초과", reward: "이번 달의 작은 선물", locked: "비밀 선물", unlocked: "해금 완료", times: "개", none: "이날은 아직 기록이 없어요.", detail: "이날 안 사기로 결정한 물건", open: "선물 열기", view: "선물 보기", monthGift: "월별 선물", week: ["일", "월", "화", "수", "목", "금", "토"]
+    },
+    zh: {
+      title: "还好没买！", count: "本月决定不买的物品", remaining: "距离解锁礼物", spent: "本月已购金额", delta: "预算剩余", over: "超出预算", reward: "本月神秘小礼物", locked: "神秘礼物", unlocked: "已解锁", times: "件", none: "这一天还没有记录。", detail: "这一天决定不买的物品", open: "打开礼物", view: "查看礼物", monthGift: "每月礼物", week: ["日", "一", "二", "三", "四", "五", "六"]
+    },
+    en: {
+      title: "Glad I waited!", count: "Items skipped this month", remaining: "Until the next gift", spent: "Spent this month", delta: "Budget left", over: "Over budget", reward: "This month's little gift", locked: "Mystery gift", unlocked: "Unlocked", times: "items", none: "No choices recorded for this day yet.", detail: "items skipped on this day", open: "Open gift", view: "View gift", monthGift: "Monthly gift", week: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    }
+  };
+  let shownMonth = null;
+  let selectedDay = null;
+  let records = [];
+  let loadedUserId = "";
+  let loadError = false;
+  let giftRequestId = 0;
+  let collectionRenderId = 0;
+  const giftPreviewCache = new Map();
+  const words = () => dictionary[currentLang] || dictionary.ko;
+  const $c = id => document.getElementById(id);
+  const seoulDate = (value = new Date()) => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit" }).format(value);
+  const today = () => seoulDate();
+  const monthKey = () => shownMonth || today().slice(0, 7);
+  const calendarMonth = () => new Date(monthKey() + "-01T12:00:00Z");
+  const monthRecords = () => records.filter(r => String(r.choice_date || "").slice(0, 7) === monthKey());
+
+  async function load(force = false) {
+    if (!supabaseClient || !currentUser) return;
+    if (!force && loadedUserId === currentUser.id) return;
+    const result = await supabaseClient.from("bow_no_buy_choices_v3")
+      .select("id,item_id,item_name,saved_amount,currency,choice_date,created_at")
+      .eq("user_id", currentUser.id)
+      .order("choice_date", { ascending: true })
+      .order("created_at", { ascending: true });
+    loadedUserId = currentUser.id;
+    loadError = !!result.error;
+    if (result.error) {
+      records = [];
+      console.warn("Monthly no-buy records unavailable:", result.error.message);
+    } else {
+      records = result.data || [];
+    }
+    render();
+  }
+
+  function render() {
+    if (!$c("bowCalendarDays")) return;
+    if (!shownMonth) shownMonth = today().slice(0, 7);
+    const w = words();
+    const month = calendarMonth();
+    const year = month.getUTCFullYear();
+    const monthIndex = month.getUTCMonth();
+    const days = new Date(Date.UTC(year, monthIndex + 1, 0)).getUTCDate();
+    const first = new Date(Date.UTC(year, monthIndex, 1)).getUTCDay();
+    const count = monthRecords().length;
+    const earliest = records.map(r => String(r.choice_date || "").slice(0, 7)).filter(Boolean).sort()[0] || "2026-01";
+    const locale = currentLang === "ko" ? "ko-KR" : currentLang === "zh" ? "zh-CN" : "en-US";
+    $c("bowCalendarHeading").textContent = w.title;
+    $c("bowMonthTitle").textContent = new Intl.DateTimeFormat(locale, { year: "numeric", month: "long", timeZone: "UTC" }).format(month);
+    $c("bowCountLabel").textContent = w.count;
+    $c("bowMonthCount").textContent = count + " " + w.times;
+    $c("bowRemainingLabel").textContent = w.remaining;
+    $c("bowRemaining").textContent = Math.max(0, GOAL - count) + " " + w.times;
+    const budget = window.bowMonthlyBudgetSnapshot?.(monthKey());
+    $c("bowSpentLabel").textContent = w.spent;
+    $c("bowMonthSpent").textContent = budget?.spent || "—";
+    $c("bowBudgetDelta").textContent = budget ? (budget.over ? w.over + " " : w.delta + " ") + budget.delta : "";
+    $c("bowWeekdays").innerHTML = w.week.map(day => "<span>" + day + "</span>").join("");
+
+    const tally = {};
+    monthRecords().forEach(r => { tally[r.choice_date] = (tally[r.choice_date] || 0) + 1; });
+    const cells = Array(first).fill('<span class="bow-calendar-empty"></span>');
+    for (let day = 1; day <= days; day++) {
+      const key = monthKey() + "-" + String(day).padStart(2, "0");
+      const n = tally[key] || 0;
+      const selected = selectedDay === day ? "selected" : "";
+      cells.push('<button type="button" class="bow-calendar-day ' + (n ? "has-choice " : "") + selected + '" data-bow-day="' + day + '" aria-label="' + key + " " + n + '"><span>' + day + "</span>" + (n ? "<small>" + n + "</small>" : "") + "</button>");
+    }
+    $c("bowCalendarDays").innerHTML = cells.join("");
+
+    const defaultDay = monthKey() === today().slice(0, 7) ? Number(today().slice(-2)) : 1;
+    const chosen = selectedDay || Math.min(defaultDay, days);
+    const chosenKey = monthKey() + "-" + String(chosen).padStart(2, "0");
+    const dayRecords = monthRecords().filter(r => r.choice_date === chosenKey);
+    $c("bowDayDetail").textContent = chosenKey + " · " + (dayRecords.length ? dayRecords.length + " " + w.detail : w.none);
+    const itemList = $c("bowDayItems");
+    itemList.innerHTML = dayRecords.map(r => {
+      const itemName = escapeHTML(r.item_name || (currentLang === "zh" ? "已记录物品" : currentLang === "en" ? "Saved item" : "기록한 물건"));
+      const itemPrice = safeNumber(r.saved_amount) > 0 ? formatPrice({ price: r.saved_amount, currency: r.currency || "KRW" }) : "";
+      return "<li><span>" + itemName + "</span>" + (itemPrice ? "<strong>" + escapeHTML(itemPrice) + "</strong>" : "") + "</li>";
+    }).join("");
+    itemList.hidden = dayRecords.length === 0;
+
+    $c("bowRewardHeading").textContent = w.reward;
+    $c("bowRewardProgressText").textContent = Math.min(count, GOAL) + " / " + GOAL;
+    $c("bowRewardFill").style.width = Math.min(100, count / GOAL * 100) + "%";
+    const achieved = count >= GOAL;
+    const giftKey = monthKey() + "/15";
+    $c("bowRewardGrid").innerHTML = '<div class="bow-reward-card ' + (achieved ? "achieved" : "") + '"><strong>' + GOAL + " " + w.times + '</strong><small>' + (achieved ? w.unlocked : w.locked) + "</small>" + (achieved ? '<button type="button" class="bow-gift-open" data-bow-gift="' + giftKey + '">' + w.open + "</button>" : "") + "</div>";
+    renderCollection();
+    $c("bowPrevMonth").disabled = monthKey() <= earliest;
+    $c("bowNextMonth").disabled = monthKey() >= today().slice(0, 7);
+  }
+
+  function renderCollection() {
+    const grid = $c("bowGiftCollectionGrid");
+    if (!grid) return;
+    const w = words();
+    const year = Number((shownMonth || today().slice(0, 7)).slice(0, 4));
+    const total = Array.from({ length: 12 }, (_, i) => {
+      const ym = year + "-" + String(i + 1).padStart(2, "0");
+      return { key: ym, count: records.filter(r => String(r.choice_date || "").slice(0, 7) === ym).length };
+    });
+    const unlockedCount = total.reduce((sum, item) => sum + (item.count >= GOAL ? 1 : 0), 0);
+    $c("bowGiftCollectionTitle").textContent = w.monthGift;
+    $c("bowGiftCollectionCount").textContent = unlockedCount + " / 12";
+    const renderId = ++collectionRenderId;
+    const activeKeys = [];
+    grid.innerHTML = total.map(item => {
+      const active = item.count >= GOAL;
+      const key = item.key + "/15";
+      const monthNumber = Number(item.key.slice(5));
+      const caption = currentLang === "zh" ? monthNumber + "月" : currentLang === "en" ? new Date(year, monthNumber - 1, 1).toLocaleString("en-US", { month: "long" }) : monthNumber + "월";
+      if (active) activeKeys.push(key);
+      return '<div class="bow-gift-tile ' + (active ? "is-unlocked" : "is-locked") + '">' + (active ? '<img class="bow-gift-preview" data-gift-preview="' + key + '" alt="" hidden>' : "") + "<strong>" + caption + "</strong>" + (active ? '<button type="button" class="bow-gift-open" data-bow-gift="' + key + '">' + w.view + "</button>" : "<small>" + w.locked + "</small>") + "</div>";
+    }).join("");
+    activeKeys.forEach(async key => {
+      const owner = currentUser?.id;
+      if (!owner || !supabaseClient) return;
+      const cacheKey = owner + "/" + key;
+      const existing = giftPreviewCache.get(cacheKey);
+      let pending;
+      if (existing && existing.expires > Date.now()) pending = existing.promise;
+      else {
+        const ym = key.split("/")[0];
+        const path = ym.replace("-", "/") + "/10.png";
+        pending = supabaseClient.storage.from("bow-secret-rewards").createSignedUrl(path, 60).then(({ data, error }) => {
+          if (error) throw error;
+          return data?.signedUrl || null;
+        });
+        giftPreviewCache.set(cacheKey, { promise: pending, expires: Date.now() + 45000 });
+      }
+      try {
+        const url = await pending;
+        if (renderId !== collectionRenderId || currentUser?.id !== owner || !url) return;
+        const img = Array.from(grid.querySelectorAll("[data-gift-preview]")).find(el => el.dataset.giftPreview === key);
+        if (img) { img.onload = () => { img.hidden = false; }; img.onerror = () => { img.hidden = true; }; img.src = url; }
+      } catch (error) { giftPreviewCache.delete(cacheKey); console.warn("Gift preview:", error); }
+    });
+  }
+
+  function closeGift() {
+    giftRequestId++;
+    const viewer = $c("bowGiftViewer");
+    if (viewer) viewer.hidden = true;
+    const image = $c("bowGiftViewerImage");
+    if (image) { image.hidden = true; image.removeAttribute("src"); }
+  }
+
+  async function openGift(key) {
+    if (!/^\d{4}-(0[1-9]|1[0-2])\/15$/.test(key)) return;
+    const ym = key.split("/")[0];
+    if (records.filter(r => String(r.choice_date || "").slice(0, 7) === ym).length < GOAL) return;
+    const viewer = $c("bowGiftViewer");
+    const image = $c("bowGiftViewerImage");
+    const status = $c("bowGiftViewerStatus");
+    const requestId = ++giftRequestId;
+    viewer.hidden = false;
+    image.hidden = true;
+    image.removeAttribute("src");
+    $c("bowGiftViewerTitle").textContent = ym + " · " + words().reward;
+    status.textContent = currentLang === "zh" ? "正在打开礼物…" : currentLang === "en" ? "Opening your gift…" : "선물을 여는 중…";
+    try {
+      if (!supabaseClient || !currentUser) throw new Error("Please sign in first.");
+      // Reuse the existing monthly reward asset (10.png); the new server policy
+      // only permits it after the 15-item milestone is reached.
+      const path = ym.replace("-", "/") + "/10.png";
+      const { data, error } = await supabaseClient.storage.from("bow-secret-rewards").createSignedUrl(path, 60);
+      if (error) throw error;
+      if (requestId !== giftRequestId) return;
+      if (!data?.signedUrl) throw new Error("No signed URL returned.");
+      image.onload = () => { if (requestId === giftRequestId) { status.textContent = ""; image.hidden = false; } };
+      image.onerror = () => { if (requestId === giftRequestId) status.textContent = currentLang === "zh" ? "礼物图片暂时无法显示，请重试。" : currentLang === "en" ? "Could not load the gift. Please retry." : "선물을 불러오지 못했어요. 다시 시도해 주세요."; };
+      image.src = data.signedUrl;
+    } catch (error) {
+      if (requestId !== giftRequestId) return;
+      console.warn("Gift access:", error);
+      status.textContent = currentLang === "zh" ? "无法打开礼物。请确认已登录且 Supabase 权限已生效。" : currentLang === "en" ? "Cannot open gift. Check sign-in and Supabase permissions." : "선물을 열 수 없어요. 로그인 및 Supabase 권한을 확인해 주세요.";
+    }
+  }
+
+  document.addEventListener("click", event => {
+    if (event.target.closest?.("#bowGiftClose") || event.target.id === "bowGiftViewer") { closeGift(); return; }
+    const gift = event.target.closest?.("[data-bow-gift]");
+    if (gift) { void openGift(gift.dataset.bowGift); return; }
+    const dayButton = event.target.closest?.("[data-bow-day]");
+    if (dayButton) { selectedDay = Number(dayButton.dataset.bowDay); render(); return; }
+    const prev = event.target.closest?.("#bowPrevMonth");
+    const next = event.target.closest?.("#bowNextMonth");
+    if (prev || next) {
+      const month = calendarMonth();
+      month.setUTCMonth(month.getUTCMonth() + (next ? 1 : -1));
+      shownMonth = month.toISOString().slice(0, 7);
+      selectedDay = null;
+      render();
+    }
+  });
+  document.addEventListener("keydown", event => { if (event.key === "Escape") closeGift(); });
+
+  const originalInitializeSupabase = initializeSupabase;
+  initializeSupabase = async function (...args) {
+    const connected = await originalInitializeSupabase(...args);
+    if (connected) await load();
+    return connected;
+  };
+  const originalApplyLanguage = applyLanguage;
+  applyLanguage = function (...args) { const result = originalApplyLanguage(...args); render(); return result; };
+  window.bowRefreshChoices = load;
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", render, { once: true });
+  else render();
+})();

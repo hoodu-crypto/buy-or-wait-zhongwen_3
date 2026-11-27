@@ -108,8 +108,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 
 .bag-handle{position:absolute;top:-72px;left:58px;width:118px;height:105px;border:16px solid #aa754e;border-bottom:0;border-radius:70px 70px 0 0}
 
-.bag-heart{font-size:75px;color:#f8d2df;line-height:1}
-
 .bag-label{font:700 22px/1 'Fredoka';text-align:center;color:#875036}
 
 .art-bear{position:absolute;left:5%;top:16%;width:178px;height:180px;border-radius:48%;background:#dca47e;border:4px solid #9f7059;transform:rotate(-14deg);box-shadow:6px 8px 0 #b9846a44}
@@ -125,8 +123,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .bear-bow{position:absolute;bottom:-18px;left:60px;color:#f9e1ed;font-size:50px}
 
 .art-card{position:absolute;right:0;top:13%;width:155px;height:177px;background:#d4e9f3;border:3px solid #a47d66;border-radius:18px;transform:rotate(12deg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;box-shadow:8px 10px 0 #ac775333}
-
-.art-card span{font-size:64px;color:#df93ab}
 
 .art-card strong{font:700 22px 'Fredoka'}
 
@@ -220,8 +216,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 
 .empty-finds{grid-column:1/-1;text-align:center;border:2px dashed #d7bca6;border-radius:18px;padding:65px 15px;background:#fffaf0}
 
-.empty-finds .empty-icon{font-size:60px}
-
 .empty-finds h3{font:600 25px 'Fredoka'}
 
 .empty-finds p{color:var(--muted);font-size:13px}
@@ -289,8 +283,6 @@ footer span{font-size:11px;color:#816c60}
 .drawer-stats b{background:#e6c5cd;padding:3px 8px;border-radius:20px}
 
 .drawer-empty{text-align:center;padding:65px 10px;color:#856e60}
-
-.drawer-empty .empty-icon{font-size:58px}
 
 .upload-dialog{width:min(490px,calc(100% - 25px));max-height:92dvh;overflow:auto;border:2px solid #ad8b76;border-radius:24px;background:#fff9eb;color:var(--brown);padding:25px;box-shadow:10px 12px 0 #4a322725}
 
@@ -1210,11 +1202,6 @@ body.show-waiting-page #waitingPage{display:block!important}
   object-fit: cover;
 }
 
-.wait-photo-empty {
-  color: #ad9e94;
-  font-size: 40px;
-}
-
 .wait-product-price {
   font-size: clamp(21px, 3vw, 28px);
   font-weight: 800;
@@ -1455,12 +1442,6 @@ html body .upload-dialog #photoPreview:not([hidden]) {
   text-align: center;
 }
 
-.similar-notice-icon {
-  font-size: 28px;
-  color: #d7839d;
-  margin-bottom: 8px;
-}
-
 .similar-notice h3 {
   font-family: "Cafe24Ssurround", sans-serif;
   font-size: 19px;
@@ -1512,10 +1493,6 @@ html body .upload-dialog #photoPreview:not([hidden]) {
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-.similar-item-image span {
-  font-size: 36px;
 }
 
 .similar-item-name {
@@ -1700,7 +1677,6 @@ html[lang="zh-CN"] .hero h1 * {
 .bow-calendar-head,.bow-month-nav,.bow-rewards-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .bow-calendar-kicker{font:600 12px 'DM Sans',sans-serif;color:#8a7770;letter-spacing:.09em}
 .bow-calendar-head h2{font-size:clamp(23px,4vw,35px);margin:8px 0 18px}
-.bow-calendar-head-icon{font-size:31px;color:#c1859e}
 .bow-month-nav{margin:5px 0 22px;font-size:21px}
 .bow-month-nav button{border:1px solid #dccdc3;background:white;border-radius:99px;width:52px;height:42px;font-size:30px;color:#694e43}
 .bow-month-nav button:disabled{opacity:.35;cursor:default}
@@ -2497,4 +2473,22 @@ html body #waitModal.wait-modal.is-chat-detail .wait-modal-header,
 html body #waitModal.wait-modal.is-chat-detail .wait-modal-tabs,
 html body #waitModal.wait-modal.is-chat-detail .wait-modal-section-title {
   display: none !important;
+}
+
+/* 24-hour item pause controls and per-date item counts. */
+#waitModal .wait-action.is-waiting { opacity: .62; cursor: not-allowed; }
+#waitModal .wait-action-hint { display:block; margin-top:4px; font-size:11px; font-weight:500; }
+.bow-day-items { list-style:none; margin:-9px 0 20px; padding:0 16px; color:#745d52; }
+.bow-day-items[hidden] { display:none !important; }
+.bow-day-items li { display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid #eee2dc; font-size:13px; }
+.bow-day-items strong { white-space:nowrap; }
+.bow-reward-grid { grid-template-columns:minmax(0,1fr); }
+
+/* Calendar summary includes monthly spending. */
+.bow-calendar-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.bow-summary-tile.spending { background: #e5f0df; color: #526c50; }
+.bow-summary-tile.spending span { font-size: 12px; line-height: 1.4; }
+@media (max-width: 600px) {
+  .bow-calendar-summary { grid-template-columns: 1fr 1fr; }
+  .bow-summary-tile.spending { grid-column: 1 / -1; }
 }

@@ -38,7 +38,7 @@
     rel="stylesheet"
   />
 
-  <link rel="stylesheet" href="style.css?v=20261124-chat-clean1" />
+  <link rel="stylesheet" href="style.css?v=20261127-remove-heart-icons" />
 
   <!-- Load Supabase library first -->
   <script
@@ -47,8 +47,8 @@
   ></script>
 
   <!-- Main website functionality -->
-  <script src="script.js?v=20261124-chat-clean1" defer></script>
-  <script src="collection.js?v=20261120-purchased2" defer></script>
+  <script src="script.js?v=20261127-remove-heart-icons" defer></script>
+  <script src="collection.js?v=20261127-remove-heart-icons" defer></script>
 
 <style>
   /* 隐藏顶部添加按钮和心愿清单数量按钮 */
@@ -68,6 +68,8 @@
 }
 </style>
 
+  <link rel="manifest" href="./manifest.webmanifest">
+  <script src="./push.js" defer></script>
 </head>
 
 <body class="bow-auth-pending">
@@ -101,6 +103,7 @@
 
     <div class="header-actions">
 
+      <button type="button" id="bowPush" class="bow-logout">알림 설정</button>
       <button type="button" id="bowLogout" class="bow-logout">로그아웃</button>
       <!-- LANGUAGE SWITCH -->
       <div
@@ -152,7 +155,7 @@
         id="openWishlist"
         aria-label="Open wishlist"
       >
-        ♡ <span id="wishlistCount">0</span>
+         <span id="wishlistCount">0</span>
       </button>
 
       <!-- MOBILE MENU -->
@@ -213,7 +216,7 @@
             id="heroUpload"
             data-i18n="want"
           >
-            ♡ I WANT IT!
+             I WANT IT!
           </button>
 
           <button
@@ -238,7 +241,6 @@
 
         <div class="art-bag">
           <span class="bag-handle"></span>
-          <span class="bag-heart">♥</span>
           <span class="bag-label">
             little<br>finds
           </span>
@@ -251,7 +253,6 @@
         </div>
 
         <div class="art-card">
-          <span>♡</span>
           <strong>SO CUTE!</strong>
           <small>but wait...</small>
         </div>
@@ -361,6 +362,50 @@
 
     </section>
 
+    <!-- MONTHLY NO-BUY CALENDAR -->
+    <section class="bow-calendar-section" id="choices" aria-labelledby="bowCalendarHeading">
+      <div class="bow-calendar-wrap">
+        <div class="bow-calendar-head">
+          <div>
+            <h2 id="bowCalendarHeading">안 사길 잘했어!</h2>
+          </div>
+        </div>
+        <div class="bow-month-nav">
+          <button type="button" id="bowPrevMonth" aria-label="Previous month">‹</button>
+          <strong id="bowMonthTitle"></strong>
+          <button type="button" id="bowNextMonth" aria-label="Next month">›</button>
+        </div>
+        <div class="bow-calendar-summary">
+          <div class="bow-summary-tile pink"><small id="bowCountLabel"></small><strong id="bowMonthCount">0</strong></div>
+          <div class="bow-summary-tile yellow"><small id="bowRemainingLabel"></small><strong id="bowRemaining">15</strong></div>
+          <div class="bow-summary-tile spending"><small id="bowSpentLabel"></small><strong id="bowMonthSpent">₩0</strong><span id="bowBudgetDelta"></span></div>
+        </div>
+        <div class="bow-calendar-weekdays" id="bowWeekdays"></div>
+        <div class="bow-calendar-days" id="bowCalendarDays"></div>
+        <div class="bow-day-detail" id="bowDayDetail" aria-live="polite"></div>
+        <ul class="bow-day-items" id="bowDayItems" hidden></ul>
+        <div class="bow-rewards-head"><strong id="bowRewardHeading"></strong><span id="bowRewardProgressText">0 / 15</span></div>
+        <div class="bow-reward-track"><div id="bowRewardFill"></div></div>
+        <div class="bow-reward-grid" id="bowRewardGrid"></div>
+        <div class="bow-gift-collection" id="bowGiftCollection" aria-labelledby="bowGiftCollectionTitle">
+          <div class="bow-gift-collection-head">
+            <div><span class="bow-calendar-kicker">MY LITTLE TREASURES</span><h3 id="bowGiftCollectionTitle">나의 선물 컬렉션</h3></div>
+            <span id="bowGiftCollectionCount" class="bow-gift-total">0 / 12</span>
+          </div>
+          <div id="bowGiftCollectionGrid" class="bow-gift-collection-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <div id="bowGiftViewer" class="bow-gift-viewer" hidden role="dialog" aria-modal="true" aria-labelledby="bowGiftViewerTitle">
+      <div class="bow-gift-viewer-panel">
+        <button type="button" class="bow-gift-close" id="bowGiftClose" aria-label="Close">×</button>
+        <h3 id="bowGiftViewerTitle"></h3>
+        <div id="bowGiftViewerStatus" role="status"></div>
+        <img id="bowGiftViewerImage" alt="" hidden />
+      </div>
+    </div>
+
     <!-- MY FINDS -->
     <section class="finds-section" id="finds" hidden aria-hidden="true">
 
@@ -372,7 +417,7 @@
             class="section-kicker"
             data-i18n="findsKicker"
           >
-            ♡ YOUR VERY OWN COLLECTION
+             YOUR VERY OWN COLLECTION
           </span>
 
           <h2 data-i18n-html="findsTitle">
@@ -466,7 +511,7 @@
           class="section-kicker"
           data-i18n="drawerKicker"
         >
-          ♡ THE LITTLE PAUSE
+           THE LITTLE PAUSE
         </span>
 
         <h2 id="drawerTitle">
@@ -497,7 +542,7 @@
       data-i18n="drawerMessage"
     >
       A photo is enough for today.
-      You don't have to buy it now ♡
+      You don't have to buy it now 
     </div>
 
     <div
@@ -740,7 +785,7 @@
           class="btn btn-yellow full"
           data-i18n="save"
         >
-          ♡ SAVE TO WISHLIST
+           SAVE TO WISHLIST
         </button>
 
       </div>
