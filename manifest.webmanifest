@@ -1,1 +1,20 @@
-{"id":"./","name":"BUY OR WAIT?","short_name":"Buy or Wait","start_url":"./","scope":"./","display":"standalone","background_color":"#fff7e9","theme_color":"#fff7e9"}
+{
+  "id": "./",
+  "name": "BUY OR WAIT?",
+  "short_name": "BUY OR WAIT",
+  "description": "So cute, but wait! Save what you love and decide later.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff7e9",
+  "theme_color": "#fff7e9",
+  "icons": [
+    {
+      "src": "./image/home-screen-icon.png?v=1",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
